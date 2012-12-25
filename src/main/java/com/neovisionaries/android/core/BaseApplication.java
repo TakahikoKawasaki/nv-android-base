@@ -37,7 +37,7 @@ public class BaseApplication extends Application
         // Initialize App class.
         App.init(this);
 
-        log("STARTED");
+        log("CREATED");
     }
 
 
@@ -47,7 +47,7 @@ public class BaseApplication extends Application
     @Override
     public void onTerminate()
     {
-        log("STOPPED");
+        log("TERMINATED");
 
         super.onTerminate();
     }

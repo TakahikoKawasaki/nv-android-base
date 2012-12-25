@@ -17,7 +17,9 @@ package com.neovisionaries.android.ui;
 
 
 import android.app.Activity;
+import android.os.Bundle;
 import com.neovisionaries.android.core.App;
+import com.neovisionaries.android.util.L;
 
 
 /**
@@ -94,4 +96,33 @@ public abstract class BaseRootActivity extends Activity
      * </p>
      */
     protected abstract void dispatch();
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        log("STARTED");
+    }
+
+
+    @Override
+    protected void onDestroy()
+    {
+        log("STOPPED");
+
+        super.onDestroy();
+    }
+
+
+    private void log(String verb)
+    {
+        // App instance.
+        App app = App.getInstance();
+
+        // Emit the log message.
+        L.dformat(this, "===== APPLICATION '%s' (version = %s) %s =====",
+                app.getApplicationLabel(), app.getVersionName(), verb);
+    }
 }

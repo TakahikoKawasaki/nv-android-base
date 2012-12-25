@@ -45,7 +45,7 @@ final class ActivityHelper
         App app = App.getInstance();
 
         // Emit a log message.
-        L.dformat(self, "===== APPLICATION '%s' (version = %s) IS STOPPING =====",
+        L.dformat(self, "===== APPLICATION '%s' (version = %s) STOPPING =====",
                 app.getApplicationLabel(), app.getVersionName());
 
         // Make the application's state as "stopping".
