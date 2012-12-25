@@ -1,0 +1,49 @@
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.neovisionaries</groupId>
+    <artifactId>nv-android-base</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Neo Visionaries Android Base Package</name>
+    <description>Basic building blocks for Android applications</description>
+    <url>https://github.com/TakahikoKawasaki/nv-android-base</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:TakahikoKawasaki/nv-android-base.git</connection>
+        <developerConnection>scm:git:git@github.com:TakahikoKawasaki/nv-android-base.git</developerConnection>
+        <url>git@github.com:TakahikoKawasaki/nv-android-base.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Takahiko Kawasaki</name>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>2.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
