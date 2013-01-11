@@ -22,7 +22,7 @@ import android.app.Activity;
 import android.view.KeyEvent;
 
 
-final class ActivityHelper
+public final class ActivityHelper
 {
     private ActivityHelper()
     {
@@ -35,6 +35,12 @@ final class ActivityHelper
      * <p>
      * {@link App#setStopping(boolean) App.getInstance().setStopping}{@code (true)}
      * is called and then {@code finish()} is called on the given Activity.
+     * </p>
+     *
+     * <p>
+     * {@code BaseXxxActivity} classes can use this method to implement
+     * {@code exit()} method. See the implementation of {@link
+     * BaseActivity#exit()} as an example.
      * </p>
      *
      * @param self
@@ -69,6 +75,13 @@ final class ActivityHelper
      * KeyEvent#KEYCODE_BACK}. Otherwise, call self.{@link
      * Activity#onKeyDown(int, KeyEvent) onKeyDown}{@code
      * (keyCode, event)}.
+     *
+     * <p>
+     * {@code BottomXxxActivity} classes can use this method to implement
+     * {@code onKeyDown(int, android.view.KeyEvent)} method.
+     * See the implementation of {@link BottomActivity#onKeyDown(int, KeyEvent)}
+     * as an example.
+     * </p>
      *
      * @param self
      * @param keyCode
