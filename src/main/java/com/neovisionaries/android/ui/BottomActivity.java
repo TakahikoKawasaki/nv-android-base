@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Neo Visionaries Inc.
+ * Copyright (C) 2012-2013 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import android.view.KeyEvent;
 public class BottomActivity extends BaseActivity
 {
     /**
-     * Call {@code this.}{@link #exit()} if the give key code is
+     * Call {@code this.}{@link #exit() exit()} if the give key code is
      * {@code KEYCODE_BACK}. This means {@code KEYCODE_BACK} causes
      * this application to terminate.
      */

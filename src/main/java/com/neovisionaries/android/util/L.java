@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Neo Visionaries Inc.
+ * Copyright (C) 2012-2013 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,58 @@ import android.util.Log;
 
 
 /**
- * Logging utility.
+ * Logging utility (Simple wrapper over android.util.Log).
+ *
+ * <p>
+ * {@code L} class provides some methods whose {@code tag}
+ * argument's type is {@code Object}. The methods convert
+ * the given {@code tag} object into a {@code String}
+ * instance by the steps shown below before calling
+ * counterpart methods of {@code android.util.Log}.
+ * </p>
+ *
+ * <ol>
+ * <li>If {@code tag} implements {@code CharSequence},
+ *     call {@code tag.toString()}.
+ * <li>Otherwise, if {@code tag} is an instance of {@code Class<?>},
+ *     call {@code ((Class<?>)tag).getSimpleName()}.
+ * <li>Otherwise, call {@code tag.getClass().getSimpleName()}.
+ *     <br/>
+ * </ol>
+ *
+ * <p>
+ * The conversion above allows programmers to write code snippets
+ * like below.
+ * </p>
+ *
+ * <style type="text/css">
+ * span.keyword { color: purple; font-weight: bold; }
+ * span.stringliteral { color: blue; }
+ * span.comment { color: green; }
+ * </style>
+ *
+ * <pre style="margin: 1em; padding: 0.5em; border: solid 1px black;">
+ * <span class="comment">// 'this' can be used as tag.</span>
+ * L.d(<span class="keyword">this</span>, <span class="stringliteral">"'this' can be used as tag."</span>);
+ *
+ * <span class="comment">// A Class instance can be used as tag.</span>
+ * L.d(MyClass.<span class="keyword">class</span>, <span class="stringliteral">"A Class instance can be used as tag."</span>);
+ * </pre>
+ *
+ * <p>
+ * {@code L} class also provides ?{@code format} methods.
+ * They internally build a {@code String} instance by calling
+ * {@code String.format(format, args)} before calling counterpart
+ * methods of {@code android.util.Log}. String concatenation by
+ * {@code +} is not needed any more before calling logging methods.
+ * </p>
+ *
+ * <pre style="margin: 1em; padding: 0.5em; border: solid 1px black;">
+ * String firstName = ...;
+ * String lastName = ...;
+ *
+ * L.dformat(<span class="keyword">this</span>, <span class="stringliteral">"Name = %s %s"</span>, firstName, lastName);
+ * </pre>
  *
  * @author Takahiko Kawasaki
  */
@@ -45,12 +96,23 @@ public final class L
     }
 
 
+    private L()
+    {
+    }
+
+
+    /**
+     * Calls {@code Log.d(tag, msg)}.
+     */
     public static int d(String tag, String msg)
     {
         return Log.d(tag, msg);
     }
 
 
+    /**
+     * Calls {@code Log.d(tag, msg, throwable)}.
+     */
     public static int d(String tag, String msg, Throwable throwable)
     {
         return Log.d(tag, msg, throwable);
@@ -81,12 +143,18 @@ public final class L
     }
 
 
+    /**
+     * Calls {@code Log.e(tag, msg)}.
+     */
     public static int e(String tag, String msg)
     {
         return Log.e(tag, msg);
     }
 
 
+    /**
+     * Calls {@code Log.e(tag, msg, throwable)}.
+     */
     public static int e(String tag, String msg, Throwable throwable)
     {
         return Log.e(tag, msg, throwable);
@@ -117,12 +185,18 @@ public final class L
     }
 
 
+    /**
+     * Calls {@code Log.i(tag, msg)}.
+     */
     public static int i(String tag, String msg)
     {
         return Log.i(tag, msg);
     }
 
 
+    /**
+     * Calls {@code Log.i(tag, msg, throwable)}.
+     */
     public static int i(String tag, String msg, Throwable throwable)
     {
         return Log.i(tag, msg, throwable);
@@ -153,12 +227,18 @@ public final class L
     }
 
 
+    /**
+     * Calls {@code Log.v(tag, msg)}.
+     */
     public static int v(String tag, String msg)
     {
         return Log.v(tag, msg);
     }
 
 
+    /**
+     * Calls {@code Log.v(tag, msg, throwable)}.
+     */
     public static int v(String tag, String msg, Throwable throwable)
     {
         return Log.v(tag, msg, throwable);
@@ -189,12 +269,18 @@ public final class L
     }
 
 
+    /**
+     * Calls {@code Log.w(tag, msg)}.
+     */
     public static int w(String tag, String msg)
     {
         return Log.w(tag, msg);
     }
 
 
+    /**
+     * Calls {@code Log.w(tag, msg, throwable)}.
+     */
     public static int w(String tag, String msg, Throwable throwable)
     {
         return Log.w(tag, msg, throwable);

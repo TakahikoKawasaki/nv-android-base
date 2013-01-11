@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Neo Visionaries Inc.
+ * Copyright (C) 2012-2013 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,12 @@ import android.app.Activity;
  * Base class for Activities that honor the chain of {@code finish()}
  * mechanism.
  *
+ * <p>
+ * {@code onResume()} method of subclasses of {@code BaseActivity}
+ * should follow the template to support the chain of {@code finish()}
+ * mechanism. See the description of {@link #onResume()} for details.
+ * </p>
+ *
  * @author Takahiko Kawasaki
  */
 public class BaseActivity extends Activity
@@ -33,7 +39,8 @@ public class BaseActivity extends Activity
      *
      * <p>
      * This method calls {@code App.getInstance().}{@link App#isStopping()
-     * isStopping()} and returns its return value.
+     * isStopping()} and returns its return value. In other words,
+     * this method is an alias of {@code App.getInstance().isStopping()}.
      * </p>
      *
      * @return
@@ -52,7 +59,13 @@ public class BaseActivity extends Activity
      * This method marks this application as stopping (by calling
      * {@code App.getInstance().}{@link App#setStopping(boolean)
      * setStopping}{@code (true)}) and closes this Activity (by
-     * calling {@code finish()}).
+     * calling {@code finish()}). If all Activities on the Activity
+     * stack honor the chain of {@code finish()} mechanism, all the
+     * Activities including the root Activity will be finished.
+     * </p>
+     *
+     * <p>
+     * The implementation of this method emits "STOPPING" log message.
      * </p>
      */
     public void exit()
@@ -62,7 +75,7 @@ public class BaseActivity extends Activity
 
 
     /**
-     * Called when this Activity is resumed.
+     * Called when this Activity gets resumed.
      *
      * <p>
      * First, the implementation of {@code onResume()} method of {@link
@@ -72,25 +85,32 @@ public class BaseActivity extends Activity
      * if the application is stopping, the implementation calls {@code
      * this.finish()}. This causes another Activity instance (which is
      * right under this Activity instance on the stack) that belongs to
-     * the application to be resumed. It is expected that the {@code
+     * the application to get resumed. It is expected that the {@code
      * onResume()} instance of the next Activity is implemented like
      * the following in order to let the application finish gracefully.
      * </p>
      *
-     * <pre style="border: solid 1px black; padding 5px;">
-     * super.onResume();
+     * <style type="text/css">
+     * span.keyword { color: purple; font-weight: bold; }
+     * span.annotation { color: grey; }
+     * span.comment { color: green; }
+     * span.field { color: blue; font-style: italic; }
+     * </style>
      *
-     * // Check if the application is stopping.
-     * if (isStopping())
+     * <pre style="margin: 1em; padding: 0.5em; border: solid 1px black;">
+     * <span class="keyword">super</span>.onResume();
+     *
+     * <span class="comment">// Check if the application is stopping.</span>
+     * <span class="keyword">if</span> (isStopping())
      * {
-     *     // finish() has already been called in super.onResume()
+     *     <span class="comment">// finish() has already been called in super.onResume()
      *     // (if this Activity is a subclass of BaseActivity), so
      *     // leave this Activity without doing anything. This chain
-     *     // of finish() will finally reach the root Activity.
-     *     return;
+     *     // of finish() will finally reach the root Activity.</span>
+     *     <span class="keyword">return</span>;
      * }
      *
-     * // Code specific to the Activity.
+     * <span class="comment">// Code specific to this Activity.</span>
      * ......
      * </pre>
      */
