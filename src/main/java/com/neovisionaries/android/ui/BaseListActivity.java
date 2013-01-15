@@ -17,7 +17,7 @@ package com.neovisionaries.android.ui;
 
 
 import com.neovisionaries.android.core.App;
-import android.app.Activity;
+import android.app.ListActivity;
 
 
 /**
@@ -30,9 +30,11 @@ import android.app.Activity;
  * mechanism. See the description of {@link #onResume()} for details.
  * </p>
  *
+ * @see BaseActivity
+ *
  * @author Takahiko Kawasaki
  */
-public class BaseActivity extends Activity
+public class BaseListActivity extends ListActivity
 {
     /**
      * Check if this application is stopping or not.
@@ -79,7 +81,7 @@ public class BaseActivity extends Activity
      *
      * <p>
      * First, the implementation of {@code onResume()} method of {@link
-     * BaseActivity} checks if this application is stopping. In other
+     * BaseListActivity} checks if this application is stopping. In other
      * words, the implementation checks if {@link #exit()} method of an
      * Activity on the stack above this Activity has been called. Then,
      * if the application is stopping, the implementation calls {@code
