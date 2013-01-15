@@ -72,9 +72,8 @@ public final class ActivityHelper
     /**
      * Exit this application by calling {@link #exit(Activity)
      * exit}{@code (true)} if the given key code is {@link
-     * KeyEvent#KEYCODE_BACK}. Otherwise, call self.{@link
-     * Activity#onKeyDown(int, KeyEvent) onKeyDown}{@code
-     * (keyCode, event)}.
+     * KeyEvent#KEYCODE_BACK}. Otherwise, nothing is done and
+     * false is returned.
      *
      * <p>
      * {@code BottomXxxActivity} classes can use this method to implement
@@ -87,7 +86,7 @@ public final class ActivityHelper
      * @param keyCode
      * @param event
      * @return
-     *         True if the key event was consumed.
+     *         True if the key code was {@code KEYCODE_BACK}.
      */
     public static boolean exitOnBackKeyDown(Activity self, int keyCode, KeyEvent event)
     {
@@ -102,7 +101,6 @@ public final class ActivityHelper
         }
 
         // The given key code is not 'back'.
-        // Let the super class handle the key event.
-        return self.onKeyDown(keyCode, event);
+        return false;
     }
 }

@@ -30,11 +30,22 @@ public class BottomActivity extends BaseActivity
     /**
      * Call {@code this.}{@link #exit() exit()} if the give key code is
      * {@code KEYCODE_BACK}. This means {@code KEYCODE_BACK} causes
-     * this application to terminate.
+     * this application to terminate. If the given key code is not
+     * {@code KEYCODE_BACK}, {@code super.onKeyDown(keyCode, event)}
+     * is called.
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
-        return ActivityHelper.exitOnBackKeyDown(this, keyCode, event);
+        if (ActivityHelper.exitOnBackKeyDown(this, keyCode, event))
+        {
+            // The given key code is KEYCODE_BACK.
+            return true;
+        }
+        else
+        {
+            // Let the super class handle the key event.
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }
