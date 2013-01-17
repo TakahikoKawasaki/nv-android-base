@@ -23,6 +23,7 @@ import android.view.KeyEvent;
  * Base class for Activities that terminate the application when
  * they receive a key down event of {@code KEYCODE_BACK}.
  *
+ * @since 1.1
  * @author Takahiko Kawasaki
  */
 public class BottomListActivity extends BaseListActivity

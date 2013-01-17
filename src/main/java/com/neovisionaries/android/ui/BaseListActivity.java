@@ -31,7 +31,7 @@ import android.app.ListActivity;
  * </p>
  *
  * @see BaseActivity
- *
+ * @since 1.1
  * @author Takahiko Kawasaki
  */
 public class BaseListActivity extends ListActivity
