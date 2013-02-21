@@ -31,12 +31,8 @@ import android.database.DataSetObserver;
  * <pre style="margin: 1em; padding: 0.5em; border: solid 1px black;">
  * Cursor cursor = ...;
  *
- * <span class="keyword">try</span>
- * {
- *     <span class="comment">// Wait for the cursor to retrieve data.</span> 
- *     <span class="keyword">new</span> CursorWaiter(cursor).{@link #join()};
- * }
- * <span class="keyword">catch</span> (InterruptedException e) {}
+ * <span class="comment">// Wait for the cursor to retrieve data.</span> 
+ * <span class="keyword">new</span> CursorWaiter(cursor).{@link #join()};
  * </pre>
  *
  * @since 1.3
@@ -67,14 +63,18 @@ public class CursorWaiter extends DataSetObserver
 
     /**
      * Wait for the cursor to retrieve data.
+     *
+     * @return
+     *         True if the cursor finished data retrieval.
+     *         False if the internal thread was interrupted for some reasons.
      */
-    public void join() throws InterruptedException
+    public boolean join()
     {
         if (0 <= cursor.getCount())
         {
             // The cursor has already finished data retrieval.
             // Return without starting any waiting thread.
-            return;
+            return true;
         }
 
         waiter = new WaiterThread();
@@ -86,8 +86,19 @@ public class CursorWaiter extends DataSetObserver
         // had finished before registerDataSetObserver() finished.
         waiter.interrupt();
 
-        // Wait until data retrieval finishes.
-        waiter.join();
+        try
+        {
+            // Wait until data retrieval finishes.
+            waiter.join();
+        }
+        catch (InterruptedException e)
+        {
+            // Interrupted.
+            return false;
+        }
+
+        // Joined.
+        return true;
     }
 
 

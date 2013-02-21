@@ -278,18 +278,19 @@ public class BaseCursor extends CursorWrapper
      * return a negative value instead of 0 until they finish fetching data.
      * </p>
      *
-     * <p>
-     * This method waits for this cursor to prepare data.
-     * </p>
+     * @return
+     *         True if this cursor finished data retrieval.
+     *         False if the internal thread was interrupted for some reasons.
      */
-    public void join() throws InterruptedException
+    public boolean join()
     {
         if (0 <= getCount())
         {
             // Data retrieval has already finished.
-            return;
+            return true;
         }
 
-        new CursorWaiter(this).join();
+        // Wait until getCount() returns a non-negative value.
+        return new CursorWaiter(this).join();
     }
 }
