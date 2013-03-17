@@ -87,7 +87,7 @@ public class BaseApplication extends Application
     /**
      * Called before this instance is discarded. This is the physical
      * end point of the application <span style="color: grey;">(the
-     * 'logical' starting point is {@code onDestroy()} of the root
+     * 'logical' end point is {@code onDestroy()} of the root
      * Activity)</span>, but because Android may not discard
      * this instance even after the root Activity finished, this method
      * is not always called on application termination. In addition,
