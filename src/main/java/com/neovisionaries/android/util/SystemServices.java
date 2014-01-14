@@ -39,7 +39,7 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
-import com.neovisionaries.android.core.App;
+import com.neovisionaries.android.app.App;
 
 
 /**

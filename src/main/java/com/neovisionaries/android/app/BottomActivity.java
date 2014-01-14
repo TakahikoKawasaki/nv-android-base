@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.neovisionaries.android.ui;
+package com.neovisionaries.android.app;
 
 
 import android.view.KeyEvent;

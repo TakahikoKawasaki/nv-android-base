@@ -16,7 +16,7 @@
 package com.neovisionaries.android.util;
 
 
-import com.neovisionaries.android.core.App;
+import com.neovisionaries.android.app.App;
 import com.neovisionaries.android.util.TypedProperties;
 import android.content.Context;
 import android.content.SharedPreferences;

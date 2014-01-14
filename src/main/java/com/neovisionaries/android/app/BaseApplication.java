@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.neovisionaries.android.core;
+package com.neovisionaries.android.app;
 
 
-import com.neovisionaries.android.ui.BaseRootActivity;
-import com.neovisionaries.android.util.L;
 import android.app.Application;
+import com.neovisionaries.android.util.L;
 
 
 /**
@@ -115,7 +114,7 @@ public class BaseApplication extends Application
         App app = App.getInstance();
 
         // Emit the log message.
-        L.dformat(this, "===== APPLICATION '%s' (version = %s) %s =====",
+        L.dformat(this, "== APPLICATION '%s' (version = %s) %s ==",
                 app.getApplicationLabel(), app.getVersionName(), verb);
     }
 }

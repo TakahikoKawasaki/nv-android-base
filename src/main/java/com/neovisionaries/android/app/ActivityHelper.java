@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.neovisionaries.android.ui;
+package com.neovisionaries.android.app;
 
 
-import com.neovisionaries.android.core.App;
-import com.neovisionaries.android.util.L;
 import android.app.Activity;
 import android.view.KeyEvent;
+import com.neovisionaries.android.util.L;
 
 
 public final class ActivityHelper
@@ -51,7 +50,7 @@ public final class ActivityHelper
         App app = App.getInstance();
 
         // Emit a log message.
-        L.dformat(self, "===== APPLICATION '%s' (version = %s) STOPPING =====",
+        L.dformat(self, "== APPLICATION '%s' (version = %s) STOPPING ==",
                 app.getApplicationLabel(), app.getVersionName());
 
         // Make the application's state as "stopping".
