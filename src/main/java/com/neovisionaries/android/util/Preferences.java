@@ -16,10 +16,9 @@
 package com.neovisionaries.android.util;
 
 
-import com.neovisionaries.android.app.App;
-import com.neovisionaries.android.util.TypedProperties;
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.neovisionaries.android.app.App;
 
 
 /**
@@ -109,6 +108,19 @@ public class Preferences extends TypedProperties
     public Preferences(Context context, String name, int mode)
     {
         prefs = context.getSharedPreferences(name, mode);
+    }
+
+
+    /**
+     * Equivalent to {@code contains(key)} on the internal
+     * SharedPreferences instance.
+     *
+     * @since 1.6
+     */
+    @Override
+    public boolean contains(String key)
+    {
+        return prefs.contains(key);
     }
 
 

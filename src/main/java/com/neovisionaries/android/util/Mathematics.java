@@ -19,6 +19,7 @@ package com.neovisionaries.android.util;
 /**
  * Math utility.
  *
+ * @since 1.5
  * @author Takahiko Kawasaki
  */
 public final class Mathematics

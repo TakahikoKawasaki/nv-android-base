@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2013 Neo Visionaries Inc.
+ * Copyright (C) 2011-2014 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,58 @@
 package com.neovisionaries.android.util;
 
 
+/**
+ * This is an abstract class that provides getters and setters
+ * for key-value pairs. Subclasses are required to implement
+ * the following abstract methods.
+ *
+ * <ul>
+ * <li>{@code void }{@link #clear()}
+ * <li>{@code boolean }{@link #contains(String) contains(String key)}
+ * <li>{@code boolean }{@link #getBoolean(String, boolean) getBoolean(String key, boolean defaultValue)}
+ * <li>{@code float }{@link #getFloat(String, float) getFloat(String key, float defaultValue)}
+ * <li>{@code int }{@link #getInt(String, int) getInt(String key, int defaultValue)}
+ * <li>{@code long }{@link #getLong(String, long) getLong(String key, long defaultValue)}
+ * <li>{@code String }{@link #getString(String, String) getString(String key, String defaultValue)}
+ * <li>{@code void }{@link #remove(String) remove(String key)}
+ * <li>{@code void }{@link #setBoolean(String, boolean) setBoolean(String key, boolean value)}
+ * <li>{@code void }{@link #setFloat(String, float) setFloat(String key, float value)}
+ * <li>{@code void }{@link #setInt(String, int) setInt(String key, int value)}
+ * <li>{@code void }{@link #setLong(String, long) setLong(String key, long value)}
+ * <li>{@code void }{@link #setString(String, String) setString(String key, String value)}
+ * </ul>
+ *
+ * <p>
+ * All non-abstract methods in this class are just wrappers
+ * over the abstract methods listed above.
+ * </p>
+ *
+ * @author Takahiko Kawasaki
+ */
 public abstract class TypedProperties
 {
     protected TypedProperties()
     {
+    }
+
+
+    /**
+     * Check if the property identified by the key exists.
+     *
+     * @since 1.6
+     */
+    public abstract boolean contains(String key);
+
+
+    /**
+     * Equivalent to {@link #contains(String) contains}{@code
+     * (key.name())}.
+     *
+     * @since 1.6
+     */
+    public boolean contains(Enum<?> key)
+    {
+        return contains(key.name());
     }
 
 
@@ -304,6 +352,161 @@ public abstract class TypedProperties
 
 
     /**
+     * Get the value of the property identified by the key as Enum.
+     * If {@code key} is null or there is no property for the key,
+     * {@code defaultValue} is returned.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> TEnum getEnum(String key, Class<TEnum> enumClass, TEnum defaultValue)
+    {
+        String name = getString(key);
+
+        if (name == null)
+        {
+            return defaultValue;
+        }
+
+        try
+        {
+            return Enum.valueOf(enumClass, name);
+        }
+        catch (RuntimeException e)
+        {
+            return defaultValue;
+        }
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(String, Class, Enum)
+     * getEnum}{@code (key, (Class<TEnum>)defaultValue.getClass(), defaultValue)}.
+     * {@code defaultValue} must not be {@code null}.
+     *
+     * @since 1.6
+     */
+    @SuppressWarnings("unchecked")
+    public <TEnum extends Enum<TEnum>> TEnum getEnum(String key, TEnum defaultValue)
+    {
+        return getEnum(key, (Class<TEnum>)defaultValue.getClass(), defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(String, Class, Enum)
+     * getEnum}{@code (key, enumClass, defaultValue)}.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> TEnum get(String key, Class<TEnum> enumClass, TEnum defaultValue)
+    {
+        return getEnum(key, enumClass, defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(String, Class, Enum)
+     * getEnum}{@code (key, (Class<TEnum>)defaultValue.getClass(), defaultValue)}.
+     * {@code defaultValue} must not be {@code null}.
+     *
+     * @since 1.6
+     */
+    @SuppressWarnings("unchecked")
+    public <TEnum extends Enum<TEnum>> TEnum get(String key, TEnum defaultValue)
+    {
+        return getEnum(key, (Class<TEnum>)defaultValue.getClass(), defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(String, Class, Enum)
+     * getEnum}{@code (key, enumClass, null)}.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> TEnum getEnum(String key, Class<TEnum> enumClass)
+    {
+        return getEnum(key, enumClass, null);
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(String, Class, Enum)
+     * getEnum}{@code (key.name(), enumClass, defaultValue)}.
+     * If {@code key} is null, {@code defaultValue} is returned.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> TEnum getEnum(Enum<?> key, Class<TEnum> enumClass, TEnum defaultValue)
+    {
+        if (key == null)
+        {
+            return defaultValue;
+        }
+
+        return getEnum(key.name(), enumClass, defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(Enum, Class, Enum)
+     * getEnum}{@code (key, (Class<TEnum>)defaultValue.getClass(), defaultValue)}.
+     * {@code defaultValue} must not be {@code null}.
+     *
+     * @since 1.6
+     */
+    @SuppressWarnings("unchecked")
+    public <TEnum extends Enum<TEnum>> TEnum getEnum(Enum<?> key, TEnum defaultValue)
+    {
+        return getEnum(key, (Class<TEnum>)defaultValue.getClass(), defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(Enum, Class, Enum)
+     * getEnum}{@code (key, enumClass, defaultValue)}.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> TEnum get(Enum<?> key, Class<TEnum> enumClass, TEnum defaultValue)
+    {
+        return getEnum(key, enumClass, defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(Enum, Class, Enum)
+     * getEnum}{@code (key, (Class<TEnum>)defaultValue.getClass(), defaultValue)}.
+     * {@code defaultValue} must not be {@code null}.
+     *
+     * @since 1.6
+     */
+    @SuppressWarnings("unchecked")
+    public <TEnum extends Enum<TEnum>> TEnum get(Enum<?> key, TEnum defaultValue)
+    {
+        return getEnum(key, (Class<TEnum>)defaultValue.getClass(), defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getEnum(String, Class)
+     * getEnum}{@code (key.name(), enumClass)}.
+     * If {@code key} is null, {@code null} is returned.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> TEnum getEnum(Enum<?> key, Class<TEnum> enumClass)
+    {
+        if (key == null)
+        {
+            return null;
+        }
+
+        return getEnum(key.name(), enumClass);
+    }
+
+
+    /**
      * Get the value of the property identified by the key as String.
      * If {@code key} is null or there is no property for the key,
      * {@code defaultValue} is returned.
@@ -562,6 +765,60 @@ public abstract class TypedProperties
     public void set(Enum<?> key, long value)
     {
         setLong(key, value);
+    }
+
+
+    /**
+     * Equivalent to {@link #setString(String, String)
+     * setString}{@code (key, (value == null) ? null : value.name())}.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> void setEnum(String key, TEnum value)
+    {
+        setString(key, (value == null) ? null : value.name());
+    }
+
+
+    /**
+     * Equivalent to {@link #setEnum(String, Enum)
+     * setEnum}{@code (key, value)}.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> void set(String key, TEnum value)
+    {
+        setEnum(key, value);
+    }
+
+
+    /**
+     * Equivalent to {@link #setEnum(String, Enum)
+     * setEnum}{@code (key.name(), value)}.
+     * If {@code key} is null, nothing is done.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> void setEnum(Enum<?> key, TEnum value)
+    {
+        if (key == null)
+        {
+            return;
+        }
+
+        setEnum(key.name(), value);
+    }
+
+
+    /**
+     * Equivalent to {@link #setEnum(Enum, Enum)
+     * setEnum}{@code (key, value)}.
+     *
+     * @since 1.6
+     */
+    public <TEnum extends Enum<TEnum>> void set(Enum<?> key, TEnum value)
+    {
+        setEnum(key, value);
     }
 
 
