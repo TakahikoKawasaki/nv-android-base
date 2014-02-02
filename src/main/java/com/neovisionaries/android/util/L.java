@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2013 Neo Visionaries Inc.
+ * Copyright (C) 2012-2014 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,8 @@ import android.util.Log;
  * </pre>
  *
  * <p>
- * {@code L} class also provides ?{@code format} methods.
+ * {@code L} class also provides {@code ?(Object tag, String format, Object... args)}
+ * and {@code ?(Object tag, Throwable cause, String format, Object... args)} methods.
  * They internally build a {@code String} instance by calling
  * {@code String.format(format, args)} before calling counterpart
  * methods of {@code android.util.Log}. String concatenation by
@@ -70,7 +71,7 @@ import android.util.Log;
  * String firstName = ...;
  * String lastName = ...;
  *
- * L.dformat(<span class="keyword">this</span>, <span class="stringliteral">"Name = %s %s"</span>, firstName, lastName);
+ * L.d(<span class="keyword">this</span>, <span class="stringliteral">"Name = %s %s"</span>, firstName, lastName);
  * </pre>
  *
  * @author Takahiko Kawasaki
@@ -102,211 +103,421 @@ public final class L
 
 
     /**
-     * Calls {@code Log.d(tag, msg)}.
+     * Emit a log message of DEBUG level by calling {@link Log#d(String, String)
+     * Log.d}{@code (tag, message)}.
      */
-    public static int d(String tag, String msg)
+    public static int d(String tag, String message)
     {
-        return Log.d(tag, msg);
+        return Log.d(tag, message);
     }
 
 
     /**
-     * Calls {@code Log.d(tag, msg, throwable)}.
+     * Emit a log message of DEBUG level by calling {@link Log#d(String, String, Throwable)
+     * Log.d}{@code (tag, message, cause)}.
      */
-    public static int d(String tag, String msg, Throwable throwable)
+    public static int d(String tag, String message, Throwable cause)
     {
-        return Log.d(tag, msg, throwable);
+        return Log.d(tag, message, cause);
     }
 
 
-    public static int d(Object tag, String msg)
+    /**
+     * Emit a log message of DEBUG level.
+     */
+    public static int d(Object tag, String message)
     {
-        return d(toTag(tag), msg);
+        return d(toTag(tag), message);
     }
 
 
-    public static int d(Object tag, String msg, Throwable throwable)
+    /**
+     * Emit a log message of DEBUG level.
+     */
+    public static int d(Object tag, String message, Throwable cause)
     {
-        return d(toTag(tag), msg, throwable);
+        return d(toTag(tag), message, cause);
     }
 
 
+    /**
+     * Emit a log message of DEBUG level.
+     *
+     * @since 1.7
+     */
+    public static int d(Object tag, String format, Object... args)
+    {
+        return dformat(tag, format, args);
+    }
+
+
+    /**
+     * Emit a log message of DEBUG level.
+     *
+     * @since 1.7
+     */
+    public static int d(Object tag, Throwable cause, String format, Object... args)
+    {
+        return dformat(tag, cause, format, args);
+    }
+
+
+    /**
+     * Emit a log message of DEBUG level.
+     *
+     * @deprecated Use {@link #d(Object, String, Object...)}.
+     */
+    @Deprecated
     public static int dformat(Object tag, String format, Object... args)
     {
         return d(toTag(tag), String.format(format, args));
     }
 
 
-    public static int dformat(Object tag, Throwable throwable, String format, Object... args)
+    /**
+     * Emit a log message of DEBUG level.
+     *
+     * @deprecated Use {@link #d(Object, Throwable, String, Object...)}.
+     */
+    @Deprecated
+    public static int dformat(Object tag, Throwable cause, String format, Object... args)
     {
-        return d(toTag(tag), String.format(format, args), throwable);
+        return d(toTag(tag), String.format(format, args), cause);
     }
 
 
     /**
-     * Calls {@code Log.e(tag, msg)}.
+     * Emit a log message of ERROR level by calling {@link Log#e(String, String)
+     * Log.e}{@code (tag, message)}.
      */
-    public static int e(String tag, String msg)
+    public static int e(String tag, String message)
     {
-        return Log.e(tag, msg);
+        return Log.e(tag, message);
     }
 
 
     /**
-     * Calls {@code Log.e(tag, msg, throwable)}.
+     * Emit a log message of ERROR level by calling {@link Log#e(String, String, Throwable)
+     * Log.e}{@code (tag, message, cause)}.
      */
-    public static int e(String tag, String msg, Throwable throwable)
+    public static int e(String tag, String message, Throwable cause)
     {
-        return Log.e(tag, msg, throwable);
+        return Log.e(tag, message, cause);
     }
 
 
-    public static int e(Object tag, String msg)
+    /**
+     * Emit a log message of ERROR level.
+     */
+    public static int e(Object tag, String message)
     {
-        return e(toTag(tag), msg);
+        return e(toTag(tag), message);
     }
 
 
-    public static int e(Object tag, String msg, Throwable throwable)
+    /**
+     * Emit a log message of ERROR level.
+     */
+    public static int e(Object tag, String message, Throwable cause)
     {
-        return e(toTag(tag), msg, throwable);
+        return e(toTag(tag), message, cause);
     }
 
 
+    /**
+     * Emit a log message of ERROR level.
+     *
+     * @since 1.7
+     */
+    public static int e(Object tag, String format, Object... args)
+    {
+        return eformat(tag, format, args);
+    }
+
+
+    /**
+     * Emit a log message of ERROR level.
+     *
+     * @since 1.7
+     */
+    public static int e(Object tag, Throwable cause, String format, Object... args)
+    {
+        return eformat(tag, cause, format, args);
+    }
+
+
+    /**
+     * Emit a log message of ERROR level.
+     *
+     * @deprecated Use {@link #e(Object, String, Object...)}.
+     */
+    @Deprecated
     public static int eformat(Object tag, String format, Object... args)
     {
         return e(toTag(tag), String.format(format, args));
     }
 
 
-    public static int eformat(Object tag, Throwable throwable, String format, Object... args)
+    /**
+     * Emit a log message of ERROR level.
+     *
+     * @deprecated Use {@link #e(Object, Throwable, String, Object...)}.
+     */
+    @Deprecated
+    public static int eformat(Object tag, Throwable cause, String format, Object... args)
     {
-        return e(toTag(tag), String.format(format, args), throwable);
+        return e(toTag(tag), String.format(format, args), cause);
     }
 
 
     /**
-     * Calls {@code Log.i(tag, msg)}.
+     * Emit a log message of INFO level by calling {@link Log#i(String, String)
+     * Log.i}{@code (tag, message)}.
      */
-    public static int i(String tag, String msg)
+    public static int i(String tag, String message)
     {
-        return Log.i(tag, msg);
+        return Log.i(tag, message);
     }
 
 
     /**
-     * Calls {@code Log.i(tag, msg, throwable)}.
+     * Emit a log message of INFO level by calling {@link Log#i(String, String, Throwable)
+     * Log.i}{@code (tag, message, cause)}.
      */
-    public static int i(String tag, String msg, Throwable throwable)
+    public static int i(String tag, String message, Throwable cause)
     {
-        return Log.i(tag, msg, throwable);
+        return Log.i(tag, message, cause);
     }
 
 
-    public static int i(Object tag, String msg)
+    /**
+     * Emit a log message of INFO level.
+     */
+    public static int i(Object tag, String message)
     {
-        return i(toTag(tag), msg);
+        return i(toTag(tag), message);
     }
 
 
-    public static int i(Object tag, String msg, Throwable throwable)
+    /**
+     * Emit a log message of INFO level.
+     */
+    public static int i(Object tag, String message, Throwable cause)
     {
-        return i(toTag(tag), msg, throwable);
+        return i(toTag(tag), message, cause);
     }
 
 
+    /**
+     * Emit a log message of INFO level.
+     *
+     * @since 1.7
+     */
+    public static int i(Object tag, String format, Object... args)
+    {
+        return iformat(tag, format, args);
+    }
+
+
+    /**
+     * Emit a log message of INFO level.
+     *
+     * @since 1.7
+     */
+    public static int i(Object tag, Throwable cause, String format, Object... args)
+    {
+        return iformat(tag, cause, format, args);
+    }
+
+
+    /**
+     * Emit a log message of INFO level.
+     *
+     * @deprecated Use {@link #i(Object, String, Object...)}.
+     */
+    @Deprecated
     public static int iformat(Object tag, String format, Object... args)
     {
         return i(toTag(tag), String.format(format, args));
     }
 
 
-    public static int iformat(Object tag, Throwable throwable, String format, Object... args)
+    /**
+     * Emit a log message of INFO level.
+     *
+     * @deprecated Use {@link #i(Object, Throwable, String, Object...)}.
+     */
+    @Deprecated
+    public static int iformat(Object tag, Throwable cause, String format, Object... args)
     {
-        return i(toTag(tag), String.format(format, args), throwable);
+        return i(toTag(tag), String.format(format, args), cause);
     }
 
 
     /**
-     * Calls {@code Log.v(tag, msg)}.
+     * Emit a log message of VERBOSE level by calling {@link Log#v(String, String)
+     * Log.v}{@code (tag, message)}.
      */
-    public static int v(String tag, String msg)
+    public static int v(String tag, String message)
     {
-        return Log.v(tag, msg);
+        return Log.v(tag, message);
     }
 
 
     /**
-     * Calls {@code Log.v(tag, msg, throwable)}.
+     * Emit a log message of VERBOSE level by calling {@link Log#v(String, String, Throwable)
+     * Log.v}{@code (tag, message, cause)}.
      */
-    public static int v(String tag, String msg, Throwable throwable)
+    public static int v(String tag, String message, Throwable cause)
     {
-        return Log.v(tag, msg, throwable);
+        return Log.v(tag, message, cause);
     }
 
 
-    public static int v(Object tag, String msg)
+    /**
+     * Emit a log message of VERBOSE level.
+     */
+    public static int v(Object tag, String message)
     {
-        return v(toTag(tag), msg);
+        return v(toTag(tag), message);
     }
 
 
-    public static int v(Object tag, String msg, Throwable throwable)
+    /**
+     * Emit a log message of VERBOSE level.
+     */
+    public static int v(Object tag, String message, Throwable cause)
     {
-        return v(toTag(tag), msg, throwable);
+        return v(toTag(tag), message, cause);
     }
 
 
+    /**
+     * Emit a log message of VERBOSE level.
+     *
+     * @since 1.7
+     */
+    public static int v(Object tag, String format, Object... args)
+    {
+        return vformat(tag, format, args);
+    }
+
+
+    /**
+     * Emit a log message of VERBOSE level.
+     *
+     * @since 1.7
+     */
+    public static int v(Object tag, Throwable cause, String format, Object... args)
+    {
+        return vformat(tag, cause, format, args);
+    }
+
+
+    /**
+     * Emit a log message of VERBOSE level.
+     *
+     * @deprecated Use {@link #v(Object, String, Object...)}.
+     */
+    @Deprecated
     public static int vformat(Object tag, String format, Object... args)
     {
         return v(toTag(tag), String.format(format, args));
     }
 
 
-    public static int vformat(Object tag, Throwable throwable, String format, Object... args)
+    /**
+     * Emit a log message of VERBOSE level.
+     *
+     * @deprecated Use {@link #v(Object, Throwable, String, Object...)}.
+     */
+    @Deprecated
+    public static int vformat(Object tag, Throwable cause, String format, Object... args)
     {
-        return v(toTag(tag), String.format(format, args), throwable);
+        return v(toTag(tag), String.format(format, args), cause);
     }
 
 
     /**
-     * Calls {@code Log.w(tag, msg)}.
+     * Emit a log message of WARN level by calling {@link Log#w(String, String)
+     * Log.w}{@code (tag, message)}.
      */
-    public static int w(String tag, String msg)
+    public static int w(String tag, String message)
     {
-        return Log.w(tag, msg);
+        return Log.w(tag, message);
     }
 
 
     /**
-     * Calls {@code Log.w(tag, msg, throwable)}.
+     * Emit a log message of WARN level by calling {@link Log#w(String, String, Throwable)
+     * Log.w}{@code (tag, message, cause)}.
      */
-    public static int w(String tag, String msg, Throwable throwable)
+    public static int w(String tag, String message, Throwable cause)
     {
-        return Log.w(tag, msg, throwable);
+        return Log.w(tag, message, cause);
     }
 
 
-    public static int w(Object tag, String msg)
+    /**
+     * Emit a log message of WARN level.
+     */
+    public static int w(Object tag, String message)
     {
-        return w(toTag(tag), msg);
+        return w(toTag(tag), message);
     }
 
 
-    public static int w(Object tag, String msg, Throwable throwable)
+    /**
+     * Emit a log message of WARN level.
+     */
+    public static int w(Object tag, String message, Throwable cause)
     {
-        return w(toTag(tag), msg, throwable);
+        return w(toTag(tag), message, cause);
     }
 
 
+    /**
+     * Emit a log message of WARN level.
+     *
+     * @since 1.7
+     */
+    public static int w(Object tag, String format, Object... args)
+    {
+        return wformat(tag, format, args);
+    }
+
+
+    /**
+     * Emit a log message of WARN level.
+     *
+     * @since 1.7
+     */
+    public static int w(Object tag, Throwable cause, String format, Object... args)
+    {
+        return wformat(tag, cause, format, args);
+    }
+
+
+    /**
+     * Emit a log message of WARN level.
+     *
+     * @deprecated Use {@link #w(Object, String, Object...)}.
+     */
+    @Deprecated
     public static int wformat(Object tag, String format, Object... args)
     {
         return w(toTag(tag), String.format(format, args));
     }
 
 
-    public static int wformat(Object tag, Throwable throwable, String format, Object... args)
+    /**
+     * Emit a log message of WARN level.
+     *
+     * @deprecated Use {@link #w(Object, Throwable, String, Object...)}.
+     */
+    @Deprecated
+    public static int wformat(Object tag, Throwable cause, String format, Object... args)
     {
-        return w(toTag(tag), String.format(format, args), throwable);
+        return w(toTag(tag), String.format(format, args), cause);
     }
 }
