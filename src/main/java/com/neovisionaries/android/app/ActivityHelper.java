@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Neo Visionaries Inc.
+ * Copyright (C) 2012-2014 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,9 +49,9 @@ public final class ActivityHelper
         // App instance.
         App app = App.getInstance();
 
-        // Emit a log message.
-        L.dformat(self, "== APPLICATION '%s' (version = %s) STOPPING ==",
-                app.getApplicationLabel(), app.getVersionName());
+        // Emit a log message related to the application's life cycle.
+        L.d(self, "== APPLICATION '%s' (version = %s) STOPPING ==",
+            app.getApplicationLabel(), app.getVersionName());
 
         // Make the application's state as "stopping".
         app.setStopping(true);

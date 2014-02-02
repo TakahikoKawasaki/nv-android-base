@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2013 Neo Visionaries Inc.
+ * Copyright (C) 2012-2014 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -211,8 +211,8 @@ public abstract class BaseRootActivity extends Activity
         // App instance.
         App app = App.getInstance();
 
-        // Emit the log message.
-        L.dformat(this, "== APPLICATION '%s' (version = %s) %s ==",
-                app.getApplicationLabel(), app.getVersionName(), verb);
+        // Emit a log message related to the application's life cycle.
+        L.d(this, "== APPLICATION '%s' (version = %s) %s ==",
+            app.getApplicationLabel(), app.getVersionName(), verb);
     }
 }
