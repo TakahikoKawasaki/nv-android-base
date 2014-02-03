@@ -10,7 +10,7 @@ A mechanism to terminate/restart an application gracefully is implemented.
 The mechanism is achieved based on the idea of "finish chain". See the
 description about onResume() method of BaseActivity for details.
 
-The expected steps to start implementing an application is as follows.
+The expected flow to start implementing an application is as follows.
 
 1. Set BaseApplication or its subclass as application name in
    AndroidManifest.xml. (See BaseApplication for details.)
