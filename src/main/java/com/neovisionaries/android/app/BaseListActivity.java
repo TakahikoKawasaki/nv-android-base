@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2013 Neo Visionaries Inc.
+ * Copyright (C) 2012-2014 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,11 +58,12 @@ public class BaseListActivity extends ListActivity
      *
      * <p>
      * This method marks this application as stopping (by calling
-     * {@code App.getInstance().}{@link App#setStopping(boolean)
-     * setStopping}{@code (true)}) and closes this Activity (by
-     * calling {@code finish()}). If all Activities on the Activity
-     * stack honor the chain of {@code finish()} mechanism, all the
-     * Activities including the root Activity will be finished.
+     * {@link App}{@code .}{@link App#getInstance() getInstance()}{@code
+     * .}{@link App#setStopping(boolean) setStopping}{@code (true)})
+     * and closes this Activity (by calling {@link #finish()}).
+     * If all Activities on the Activity stack honor the chain of
+     * {@code finish()} mechanism, all the Activities including
+     * the root Activity will be finished.
      * </p>
      *
      * <p>
@@ -72,6 +73,40 @@ public class BaseListActivity extends ListActivity
     public void exit()
     {
         ActivityHelper.exit(this);
+    }
+
+
+    /**
+     * Restart this application.
+     *
+     * <p>
+     * This method marks this application as restarting (by calling
+     * {@link App}{@code .}{@link App#getInstance() getInstance()}{@code
+     * .}{@link App#setRestarting(boolean) setRestarting}{@code (true)})
+     * and closes this Activity (by calling {@link #finish()}).
+     * If all Activities on the Activity stack honor the chain of
+     * {@code finish()} mechanism, all the Activities including
+     * the root Activity will be finished.
+     * </p>
+     *
+     * </p>
+     * This restart mechanism assumes that the root Activity is a subclass
+     * of {@link BaseRootActivity} (or any Activity whose {@link #onDestroy()}
+     * does the same thing as {@code BaseRootActivity} does), whose
+     * {@code onDestroy()} method checks whether the application is
+     * in the process of restart (= whether {@link App}{@code .}{@link
+     * App#getInstance() getInstance()}{@code .}{@link App#isRestarting()
+     * isRestarting()} returns {@code true}) and restarts the application
+     * in that case. Restarting is performed by passing an {@code Intent}
+     * with {@code ACTION_MAIN} &amp; {@code CATEGORY_LAUNCHER} to
+     * {@link #startActivity(android.content.Intent) startActivity(Intent)}.
+     * </p>
+     *
+     * @since 1.7
+     */
+    public void restart()
+    {
+        ActivityHelper.restart(this);
     }
 
 

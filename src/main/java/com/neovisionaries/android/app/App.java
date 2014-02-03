@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2013 Neo Visionaries Inc.
+ * Copyright (C) 2011-2014 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,19 @@ package com.neovisionaries.android.app;
 
 
 import java.util.Locale;
-import com.neovisionaries.android.util.Preferences;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import com.neovisionaries.android.util.Preferences;
 
 
 /**
  * A class to manage global information of the application.
  * {@link #init(Context)} method must be called before use.
+ *
+ * @see BaseApplication
  *
  * @author Takahiko Kawasaki
  */
@@ -43,29 +45,34 @@ public class App
      * The application context passed as the argument of
      * {@link #init(Context)} method.
      */
-    private Context context;
+    private final Context context;
 
     /**
      * Application label.
      */
-    private String applicationLabel;
+    private final String applicationLabel;
 
     /**
      * Version name.
      */
-    private String versionName;
+    private final String versionName;
 
     /**
      * Preferences.
      */
-    private Preferences preferences;
-
+    private final Preferences preferences;
 
     /**
      * Flag to indicate whether the application is in the process
      * of termination.
      */
     private boolean stopping;
+
+    /**
+     * Flag to indicate whether the application is in the process
+     * of restart.
+     */
+    private boolean restarting;
 
 
     /**
@@ -228,7 +235,7 @@ public class App
 
     /**
      * Get the application label of this application.
-     * 
+     *
      * @return
      *         The value returned from {@link
      *         android.content.pm.PackageManager#getApplicationLabel(ApplicationInfo)
@@ -324,5 +331,27 @@ public class App
     public void setStopping(boolean stopping)
     {
         this.stopping = stopping;
+    }
+
+
+    /**
+     * Check whether this application is in the process of restart.
+     *
+     * @since 1.7
+     */
+    public boolean isRestarting()
+    {
+        return restarting;
+    }
+
+
+    /**
+     * Set the restart state of this application.
+     *
+     * @since 1.7
+     */
+    public void setRestarting(boolean restarting)
+    {
+        this.restarting = restarting;
     }
 }

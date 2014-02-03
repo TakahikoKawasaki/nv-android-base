@@ -32,8 +32,10 @@ public final class ActivityHelper
      * Mark this application as stopping and finish the given Activity.
      *
      * <p>
-     * {@link App#setStopping(boolean) App.getInstance().setStopping}{@code (true)}
-     * is called and then {@code finish()} is called on the given Activity.
+     * {@link App}{@code .}{@link App#getInstance() getInstance()}{@code
+     * .}{@link App#setStopping(boolean) setStopping}{@code (true)}
+     * is called and then {@link Activity#finish() finish()} is called
+     * on the given Activity.
      * </p>
      *
      * <p>
@@ -41,8 +43,6 @@ public final class ActivityHelper
      * {@code exit()} method. See the implementation of {@link
      * BaseActivity#exit()} as an example.
      * </p>
-     *
-     * @param self
      */
     public static void exit(Activity self)
     {
@@ -101,5 +101,36 @@ public final class ActivityHelper
 
         // The given key code is not 'back'.
         return false;
+    }
+
+
+    /**
+     * Mark this application as restarting and finish the given Activity.
+     *
+     * <p>
+     * {@link App}{@code .}{@link App#getInstance() getInstance()}{@code
+     * .}{@link App#setRestarting(boolean) setRestarting}{@code (true)}
+     * is called and then {@link #exit(Activity) exit}{@code (self)}
+     * is called.
+     * </p>
+     *
+     * <p>
+     * {@code BaseXxxActivity} classes can use this method to implement
+     * {@code restart()} method. See the implementation of {@link
+     * BaseActivity#restart()} as an example.
+     * </p>
+     *
+     * @since 1.7
+     */
+    public static void restart(Activity self)
+    {
+        // App instance.
+        App app = App.getInstance();
+
+        // Make the application's state as "restarting".
+        app.setRestarting(true);
+
+        // Terminate this application.
+        exit(self);
     }
 }

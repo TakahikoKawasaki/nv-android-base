@@ -46,8 +46,7 @@ import com.neovisionaries.android.util.L;
  *
  *     <span class="tag">&lt;application</span>
  *         <span class="key">android:name</span>=<span class="value">"com.neovisionaries.android.app.BaseApplication"</span><span class="tag">&gt;</span>
- *         ......<span class="tag">&gt;</span>
- * </pre>
+ *         ......<span class="tag">&gt;</span></pre>
  *
  * @see App
  *

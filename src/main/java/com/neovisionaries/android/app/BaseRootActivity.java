@@ -17,13 +17,33 @@ package com.neovisionaries.android.app;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import com.neovisionaries.android.util.L;
 
 
 /**
- * Base class for Activities that work as a root Activity of an application
- * whose Activities honor the chain of {@code finish()} mechanism.
+ * Base class for a root Activity of an application whose all the other
+ * Activities honor the chain of {@code finish()} mechanism.
+ *
+ * <p>
+ * A subclass of this class is expected to be set as the main activity in
+ * {@code AndroidManifest.xml} like the following.
+ * </p>
+ *
+ * <style type="text/css">
+ * span.tag { color: #009999; font-weight: bold; }
+ * span.key { color: purple; font-weight: bold; }
+ * span.value { color: blue; font-style: italic; }
+ * </style>
+ *
+ * <pre style="margin: 1em; padding: 0.5em; border: solid 1px black;">
+ * <span class="tag">&lt;activity</span> <span class="key">android:name</span>=<span class="value">".RootActivity"</span> <span class="tag">&gt;</span>
+ *     <span class="tag">&lt;intent-filter&gt;</span>
+ *         <span class="tag">&lt;action</span> <span class="key">android:name</span>=<span class="value">"android.intent.action.MAIN"</span> <span class="tag">/&gt;</span>
+ *         <span class="tag">&lt;category</span> <span class="key">android:name</span>=<span class="value">"android.intent.category.LAUNCHER"</span> <span class="tag">/&gt;</span>
+ *     <span class="tag">&lt;/intent-filter&gt;</span>
+ * <span class="tag">&lt;/activity&gt;</span></pre>
  *
  * <p>
  * Sub classes are required to implement {@link #dispatch()} method which is
@@ -66,8 +86,26 @@ import com.neovisionaries.android.util.L;
  *         // from the default mechanism of Android's Activity
  *         // management.</span>
  *     }
- * }
- * </pre>
+ * }</pre>
+ *
+ * <p>
+ * The implementation of {@link #onDestroy()} method of this class
+ * does the following to support restarting.
+ * </p>
+ *
+ * <ol>
+ * <li>Emit a log message saying "STOPPED".
+ * <li>Check if the application is in the process of restart
+ *     (= check if {@link App}{@code .}{@link App#getInstance()
+ *     getInstance()}{@code .}{@link App#isRestarting()
+ *     isRestarting()} returns {@code true}).
+ * <li>If the application is in the process of restart, create an
+ *     {@link Intent} with {@link Intent#ACTION_MAIN ACTION_MAIN}
+ *     &amp; {@link Intent#CATEGORY_LAUNCHER CATEGORY_LAUNCHER}
+ *     and pass it to {@link #startActivity(Intent)}, and the call
+ *     {@link App}{@code .}{@link App#getInstance() getInstance()}{@code
+ *     .}{@link App#setRestarting(boolean) setRestarting}{@code (false)}.
+ * </ol>
  *
  * @author Takahiko Kawasaki
  */
@@ -105,7 +143,9 @@ public abstract class BaseRootActivity extends Activity
     {
         super.onResume();
 
-        if (App.getInstance().isStopping())
+        App app = App.getInstance();
+
+        if (app.isStopping())
         {
             // Close this Activity, meaning that this application is closed
             // because this Activity is the root.
@@ -113,10 +153,14 @@ public abstract class BaseRootActivity extends Activity
 
             // Reset the termination state because Android may reuse this
             // Activity instance instead of creating a new one.
-            App.getInstance().setStopping(false);
+            app.setStopping(false);
         }
         else
         {
+            // Reset the restart state for the case where onDestroy() has
+            // failed to be called during the last restart process.
+            app.setRestarting(false);
+
             // Launch another Activity.
             dispatch();
         }
@@ -193,6 +237,13 @@ public abstract class BaseRootActivity extends Activity
      *
      * <p>
      * The implementation of this method emits "STOPPED" log message.
+     * And then, if required (= if {@link App}{@code .}{@link App#getInstance()
+     * getInstance()}{@code .}{@link App#isRestarting() isRestarting()} returns
+     * {@code true}), this implementation restarts {@code this} activity by
+     * passing an {@link Intent} with {@link Intent#ACTION_MAIN ACTION_MAIN}
+     * &amp; {@link Intent#CATEGORY_LAUNCHER CATEGORY_LAUNCHER} to
+     * {@link #startActivity(Intent)}. In such a case, "RESTARTING" log
+     * message is emitted.
      * </p>
      *
      * @see BaseApplication#onTerminate()
@@ -202,17 +253,51 @@ public abstract class BaseRootActivity extends Activity
     {
         log("STOPPED");
 
+        if (App.getInstance().isRestarting())
+        {
+            log("RESTARTING");
+
+            // Trigger this activity to be launched as if it started
+            // from the launcher.
+            startActivity(createMainLauncherIntent());
+
+            // Reset the restart state because Android may reuse this
+            // Activity instance instead of creating a new one.
+            App.getInstance().setRestarting(false);
+        }
+
         super.onDestroy();
     }
 
 
-    private void log(String verb)
+    /**
+     * Emit a log message related to the application's life cycle.
+     */
+    private void log(String state)
     {
         // App instance.
         App app = App.getInstance();
 
         // Emit a log message related to the application's life cycle.
         L.d(this, "== APPLICATION '%s' (version = %s) %s ==",
-            app.getApplicationLabel(), app.getVersionName(), verb);
+            app.getApplicationLabel(), app.getVersionName(), state);
+    }
+
+
+    /**
+     * Create an {@link Intent} with {@link Intent#ACTION_MAIN ACTION_MAIN}
+     * &amp; {@link Intent#CATEGORY_LAUNCHER CATEGORY_LAUNCHER} to launch
+     * {@code this} activity.
+     */
+    private Intent createMainLauncherIntent()
+    {
+        Intent intent = new Intent();
+
+        // To launch this activity as if it started from the launcher.
+        intent.setClass(this, getClass());
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        return intent;
     }
 }
