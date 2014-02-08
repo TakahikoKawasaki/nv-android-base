@@ -101,7 +101,7 @@ public class App
         this.versionName = pkgInfo.versionName;
 
         // Preferences
-        this.preferences = new Preferences(context, applicationLabel);
+        this.preferences = new Preferences(context, pkgName);
 
         // Workaround against Issue 9431.
         doWorkaroundAgainstIssue9431();

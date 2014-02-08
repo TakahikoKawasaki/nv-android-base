@@ -34,7 +34,7 @@ public final class Mathematics
      *
      * <p>
      * This method just does {@link Math#max(int, int) Math.max}{@code
-     * (min, }{@link Math#min(int, int) Math.min}{@code (value, max)}.
+     * (min, }{@link Math#min(int, int) Math.min}{@code (value, max))}.
      * </p>
      */
     public static int clamp(int min, int value, int max)
@@ -48,7 +48,7 @@ public final class Mathematics
      *
      * <p>
      * This method just does {@link Math#max(long, long) Math.max}{@code
-     * (min, }{@link Math#min(long, long) Math.min}{@code (value, max)}.
+     * (min, }{@link Math#min(long, long) Math.min}{@code (value, max))}.
      * </p>
      */
     public static long clamp(long min, long value, long max)
@@ -62,7 +62,7 @@ public final class Mathematics
      *
      * <p>
      * This method just does {@link Math#max(float, float) Math.max}{@code
-     * (min, }{@link Math#min(float, float) Math.min}{@code (value, max)}.
+     * (min, }{@link Math#min(float, float) Math.min}{@code (value, max))}.
      * </p>
      */
     public static float clamp(float min, float value, float max)
@@ -76,7 +76,7 @@ public final class Mathematics
      *
      * <p>
      * This method just does {@link Math#max(double, double) Math.max}{@code
-     * (min, }{@link Math#min(double, double) Math.min}{@code (value, max)}.
+     * (min, }{@link Math#min(double, double) Math.min}{@code (value, max))}.
      * </p>
      */
     public static double clamp(double min, double value, double max)
