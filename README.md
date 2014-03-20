@@ -48,7 +48,7 @@ Maven
     <dependency>
         <groupId>com.neovisionaries</groupId>
         <artifactId>nv-android-base</artifactId>
-        <version>1.7</version>
+        <version>1.8</version>
     </depenency>
 ```
 
