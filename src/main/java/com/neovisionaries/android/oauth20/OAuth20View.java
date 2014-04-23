@@ -1,18 +1,14 @@
-package com.neovisionaries.android.widget;
+package com.neovisionaries.android.oauth20;
 
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 
 public class OAuth20View extends WebView
 {
-    private final OAuth20Settings mOAuth20Settings = new OAuth20Settings();
-
-
     /**
      * A constructor that calls {@link WebView#WebView(Context, AttributeSet, int)
      * super(context, attrs, defStyle)}.
@@ -69,20 +65,30 @@ public class OAuth20View extends WebView
 
         // Scroll bar
         setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
-
-        // Set a WebViewClient.
-        setWebViewClient(new LocalWebViewClient());
     }
 
 
-    public OAuth20Settings getOAuth20Settings()
+    public void load(AuthorizationRequest request, OAuth20ViewListener listener)
     {
-        return mOAuth20Settings;
-    }
+        if (request == null)
+        {
+            throw new IllegalArgumentException("request is null.");
+        }
 
+        if (listener == null)
+        {
+            throw new IllegalArgumentException("listener is null.");
+        }
 
-    private class LocalWebViewClient extends WebViewClient
-    {
-        // TODO
+        // Convert the request to a URL. toURL() validates the content
+        // of the request. IllegalStateException is thrown when invalid.
+        String url = request.toURL().toString();
+
+        // Set a WebViewClient that handles a response from OAuth 2.0
+        // authorization endpoint.
+        setWebViewClient(new OAuth20ViewClient(this, request, listener));
+
+        // Send the request to OAuth 2.0 authorization endpoint.
+        super.loadUrl(url);
     }
 }
