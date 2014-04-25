@@ -128,6 +128,43 @@ public class AuthorizationRequest implements Parcelable
 
 
     /**
+     * Set the authorization endpoint.
+     *
+     * @param endpoint
+     *         The authorization endpoint.
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @throws IllegalArgumentException
+     *         The given endpoint is not a valid URL, or
+     *         it includes a fragment component.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1"
+     *      >RFC 6749 (OAuth 2.0), 3.1. Authorization Endpoint</a>
+     */
+    public AuthorizationRequest setEndpoint(String endpoint)
+    {
+        URL url = null;
+
+        if (endpoint != null)
+        {
+            try
+            {
+                url = new URL(endpoint);
+            }
+            catch (MalformedURLException e)
+            {
+                // The endpoint is malformed.
+                throw new IllegalArgumentException(e);
+            }
+        }
+
+        return setEndpoint(url);
+    }
+
+
+    /**
      * Get the response type (= the value of {@code response_type}
      * parameter (REQUIRED parameter)).
      *
