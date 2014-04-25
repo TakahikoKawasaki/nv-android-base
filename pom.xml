@@ -10,7 +10,7 @@
 
     <groupId>com.neovisionaries</groupId>
     <artifactId>nv-android-base</artifactId>
-    <version>1.9-SNAPSHOT</version>
+    <version>1.9</version>
     <packaging>jar</packaging>
 
     <name>Neo Visionaries Android Base Package</name>
