@@ -16,6 +16,12 @@
 package com.neovisionaries.android.oauth20;
 
 
+import static com.neovisionaries.android.util.ParcelUtils.readStringWithPresenceFlag;
+import static com.neovisionaries.android.util.ParcelUtils.writeStringWithPresenceFlag;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+
 /**
  * Access token.
  *
@@ -23,13 +29,31 @@ package com.neovisionaries.android.oauth20;
  *
  * @author Takahiko Kawasaki
  */
-public class AccessToken
+public class AccessToken implements Parcelable
 {
     private String access_token;
     private String token_type;
     private int expires_in;
     private String refresh_token;
     private String scope;
+
+
+    /**
+     * The default constructor.
+     */
+    public AccessToken()
+    {
+    }
+
+
+    private AccessToken(Parcel in)
+    {
+        access_token  = readStringWithPresenceFlag(in);
+        token_type    = readStringWithPresenceFlag(in);
+        expires_in    = in.readInt();
+        refresh_token = readStringWithPresenceFlag(in);
+        scope         = readStringWithPresenceFlag(in);
+    }
 
 
     /**
@@ -202,4 +226,39 @@ public class AccessToken
 
         return this;
     }
+
+
+    public int describeContents()
+    {
+        return 0;
+    }
+
+
+    public void writeToParcel(Parcel out, int flags)
+    {
+        writeStringWithPresenceFlag(out, access_token);
+        writeStringWithPresenceFlag(out, token_type);
+        out.writeInt(expires_in);
+        writeStringWithPresenceFlag(out, refresh_token);
+        writeStringWithPresenceFlag(out, scope);
+    }
+
+
+    /**
+     * CREATER required by {@link Parcelable} interface.
+     */
+    public static final Parcelable.Creator<AccessToken> CREATOR
+        = new Parcelable.Creator<AccessToken>()
+    {
+        public AccessToken createFromParcel(Parcel in)
+        {
+            return new AccessToken(in);
+        }
+
+
+        public AccessToken[] newArray(int size)
+        {
+            return new AccessToken[size];
+        }
+    };
 }

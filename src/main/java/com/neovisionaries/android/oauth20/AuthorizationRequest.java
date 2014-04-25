@@ -777,14 +777,12 @@ public class AuthorizationRequest implements Parcelable
     }
 
 
-    @Override
     public int describeContents()
     {
         return 0;
     }
 
 
-    @Override
     public void writeToParcel(Parcel out, int flags)
     {
         writeSerializableWithPresenceFlag(out, mEndpoint);
@@ -886,17 +884,18 @@ public class AuthorizationRequest implements Parcelable
     }
 
 
+    /**
+     * CREATER required by {@link Parcelable} interface.
+     */
     public static final Parcelable.Creator<AuthorizationRequest> CREATOR
         = new Parcelable.Creator<AuthorizationRequest>()
     {
-        @Override
         public AuthorizationRequest createFromParcel(Parcel in)
         {
             return new AuthorizationRequest(in);
         }
 
 
-        @Override
         public AuthorizationRequest[] newArray(int size)
         {
             return new AuthorizationRequest[size];
