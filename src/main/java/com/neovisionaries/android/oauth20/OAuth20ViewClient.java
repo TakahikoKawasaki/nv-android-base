@@ -38,6 +38,7 @@ import android.webkit.WebViewClient;
 class OAuth20ViewClient extends WebViewClient
 {
     private final OAuth20View mOAuth20View;
+    private final AuthorizationRequest mRequest;
     private final ResponseType mResponseType;
     private final String mRedirectUri;
     private final OAuth20ViewListener mListener;
@@ -46,6 +47,7 @@ class OAuth20ViewClient extends WebViewClient
     OAuth20ViewClient(OAuth20View view, AuthorizationRequest request, OAuth20ViewListener listener)
     {
         mOAuth20View  = view;
+        mRequest      = request;
         mResponseType = request.getResponseType();
         mRedirectUri  = (request.getRedirectUri() == null) ? null
                       : request.getRedirectUri().toString();
@@ -249,7 +251,7 @@ class OAuth20ViewClient extends WebViewClient
 
         try
         {
-            mListener.onCodeIssued(mOAuth20View, code, state);
+            mListener.onCodeIssued(mOAuth20View, mRequest, code, state);
         }
         catch (Throwable t)
         {
@@ -275,7 +277,7 @@ class OAuth20ViewClient extends WebViewClient
 
         try
         {
-            mListener.onTokenIssued(mOAuth20View, ac, state);
+            mListener.onTokenIssued(mOAuth20View, mRequest, ac, state);
         }
         catch (Throwable t)
         {
@@ -293,7 +295,7 @@ class OAuth20ViewClient extends WebViewClient
 
         try
         {
-            mListener.onError(mOAuth20View, error, description, uri, state);
+            mListener.onError(mOAuth20View, mRequest, error, description, uri, state);
         }
         catch (Throwable t)
         {

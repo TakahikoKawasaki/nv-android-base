@@ -36,6 +36,9 @@ public interface OAuth20ViewListener
      * @param view
      *         The {@link OAuth20View} with which this listener is associated.
      *
+     * @param request
+     *         The authorization request.
+     *
      * @param code
      *         An authorization code issued by the authorization server.
      *
@@ -43,7 +46,9 @@ public interface OAuth20ViewListener
      *         The value of {@code state} parameter which was contained
      *         in the original authorization request sent from this client.
      */
-    void onCodeIssued(OAuth20View view, String code, String state);
+    void onCodeIssued(
+            OAuth20View view, AuthorizationRequest request,
+            String code, String state);
 
 
     /**
@@ -57,6 +62,9 @@ public interface OAuth20ViewListener
      * @param view
      *         The {@link OAuth20View} with which this listener is associated.
      *
+     * @param request
+     *         The authorization request.
+     *
      * @param accessToken
      *         An access token issued by the authorization server.
      *
@@ -64,7 +72,9 @@ public interface OAuth20ViewListener
      *         The value of {@code state} parameter which was contained
      *         in the original authorization request sent from this client.
      */
-    void onTokenIssued(OAuth20View view, AccessToken accessToken, String state);
+    void onTokenIssued(
+            OAuth20View view, AuthorizationRequest request,
+            AccessToken accessToken, String state);
 
 
     /**
@@ -72,6 +82,9 @@ public interface OAuth20ViewListener
      *
      * @param view
      *         The {@link OAuth20View} with which this listener is associated.
+     *
+     * @param request
+     *         The authorization request.
      *
      * @param error
      *         An error ID.
@@ -87,5 +100,7 @@ public interface OAuth20ViewListener
      *         The value of {@code state} parameter which was contained
      *         in the original authorization request sent from this client.
      */
-    void onError(OAuth20View view, OAuth20Error error, String description, String uri, String state);
+    void onError(
+            OAuth20View view, AuthorizationRequest request,
+            OAuth20Error error, String description, String uri, String state);
 }
