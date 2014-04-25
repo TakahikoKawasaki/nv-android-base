@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2014 Neo Visionaries Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.neovisionaries.android.oauth20;
 
 
@@ -5,10 +20,28 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
+/**
+ * OAuth 2.0 authorization request.
+ *
+ * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1"
+ *      >RFC 6749 (OAuth 2.0), 3.1. Authorization Endpoint</a>
+ *
+ * @see <a href="http://tools.ietf.org/html/rfc6749#section-4.1.1"
+ *      >RFC 6749 (OAuth 2.0), 4.1.1. Authorization Request</a>
+ *
+ * @see <a href="http://tools.ietf.org/html/rfc6749#section-4.2.1"
+ *      >RFC 6749 (OAuth 2.0), 4.2.1. Authorization Request</a>
+ *
+ * @since 1.9
+ *
+ * @author Takahiko Kawasaki
+ */
 public class AuthorizationRequest
 {
     private URL mEndpoint;
@@ -17,28 +50,83 @@ public class AuthorizationRequest
     private URL mRedirectUri;
     private Set<String> mScopeSet;
     private String mState;
+    private Map<String, String> mExtraParameters;
+    private char mScopeDelimiter = ' ';
 
 
+    /**
+     * Get the authorization endpoint.
+     *
+     * @return
+     *         The authorization endpoint.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1"
+     *      >RFC 6749 (OAuth 2.0), 3.1. Authorization Endpoint</a>
+     */
     public URL getEndpoint()
     {
         return mEndpoint;
     }
 
 
+    /**
+     * Set the authorization endpoint.
+     *
+     * @param endpoint
+     *         The authorization endpoint.
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @throws IllegalArgumentException
+     *         The endpoint includes a fragment component.
+     *         It is prohibited by the specification.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1"
+     *      >RFC 6749 (OAuth 2.0), 3.1. Authorization Endpoint</a>
+     */
     public AuthorizationRequest setEndpoint(URL endpoint)
     {
+        if (endpoint != null)
+        {
+            validateEndpoint(endpoint);
+        }
+
         mEndpoint = endpoint;
 
         return this;
     }
 
 
+    /**
+     * Get the response type (= the value of {@code response_type}
+     * parameter (REQUIRED parameter)).
+     *
+     * @return
+     *         The response type.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1.1"
+     *      >RFC 6749 (OAuth 2.0), 3.1.1. Response Type</a>
+     */
     public ResponseType getResponseType()
     {
         return mResponseType;
     }
 
 
+    /**
+     * Set the response type (= the value of {@code response_type}
+     * parameter (REQUIRED parameter)).
+     *
+     * @param responseType
+     *         The response type.
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1.1"
+     *      >RFC 6749 (OAuth 2.0), 3.1.1. Response Type</a>
+     */
     public AuthorizationRequest setResponseType(ResponseType responseType)
     {
         mResponseType = responseType;
@@ -47,12 +135,29 @@ public class AuthorizationRequest
     }
 
 
+    /**
+     * Get the client ID (= the value of {@code client_id} parameter
+     * (REQUIRED parameter)).
+     *
+     * @return
+     *         The client ID.
+     */
     public String getClientId()
     {
         return mClientId;
     }
 
 
+    /**
+     * Set the client ID (= the value of {@code client_id} parameter
+     * (REQUIRED parameter)).
+     *
+     * @param clientId
+     *         The client ID.
+     *
+     * @return
+     *         {@code this} object.
+     */
     public AuthorizationRequest setClientId(String clientId)
     {
         mClientId = clientId;
@@ -61,12 +166,46 @@ public class AuthorizationRequest
     }
 
 
+    /**
+     * Get the redirect URI (= the value of {@code redirect_uri} parameter
+     * (OPTIONAL parameter)).
+     *
+     * @return
+     *         The redirect URI.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1.2"
+     *      >RFC 6749 (OAuth 2.0), 3.1.2. Redirection Endpoint</a>
+     */
     public URL getRedirectUri()
     {
         return mRedirectUri;
     }
 
 
+    /**
+     * Set the redirect URI (= the value of {@code redirect_uri} parameter
+     * (OPTIONAL parameter)).
+     *
+     * <p>
+     * <a href="http://tools.ietf.org/html/rfc6749#section-3.1.2"
+     * >RFC 6749 (OAuth 2.0), 3.1.2. Redirection Endpoint</a> says
+     * <i>"The redirection endpoint URI MUST be an absolute URI", so
+     * this method accepts the parameter value as {@link URL}.
+     * </p>
+     *
+     * @param redirectUri
+     *         The redirect URI.
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @throws IllegalArgumentException
+     *         The redirect URI includes a fragment component.
+     *         It is prohibited by the specification.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1.2"
+     *      >RFC 6749 (OAuth 2.0), 3.1.2. Redirection Endpoint</a>
+     */
     public AuthorizationRequest setRedirectUri(URL redirectUri)
     {
         if (redirectUri != null)
@@ -80,20 +219,105 @@ public class AuthorizationRequest
     }
 
 
+    /**
+     * Get the scopes, which are elements in the value of
+     * {@code scope} parameter (OPTIONAL parameter).
+     *
+     * @return
+     *         The scopes.
+     */
     public Set<String> getScopeSet()
     {
         return mScopeSet;
     }
 
 
+    /**
+     * Set the scopes, which are elements in the value of
+     * {@code scope} parameter (OPTIONAL parameter).
+     *
+     * <p>
+     * Scopes must comply with the specification shown below.
+     * Otherwise, {@code IllegalArgumentException} is thrown.
+     * </p>
+     *
+     * <pre>
+     * scope-token = 1*( %x21 / %x23-5B / %x5D-7E )
+     * </pre>
+     *
+     * <p>
+     * {@code null} and an empty value do not raise
+     * {@code IllegalArgumentException} and are just ignored.
+     * </p>
+     *
+     * @param scopeSet
+     *         Scopes to be set.
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @throws IllegalArgumentException
+     *         There is a scope which does not comply with the
+     *         specification.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.3"
+     *      >RFC 6749 (OAuth 2.0), 3.3. Access Token Scope</a>
+     */
     public AuthorizationRequest setScopeSet(Set<String> scopeSet)
     {
         mScopeSet = scopeSet;
+
+        if (scopeSet == null)
+        {
+            return this;
+        }
+
+        // Check whether all the scopes comply with the specification.
+        for (String scope : scopeSet)
+        {
+            if (scope == null || scope.length() == 0)
+            {
+                continue;
+            }
+
+            validateScope(scope);
+        }
 
         return this;
     }
 
 
+    /**
+     * Add scopes, which are elements in the value of
+     * {@code scope} parameter (OPTIONAL parameter).
+     *
+     * <p>
+     * Scopes must comply with the specification shown below.
+     * Otherwise, {@code IllegalArgumentException} is thrown.
+     * </p>
+     *
+     * <pre>
+     * scope-token = 1*( %x21 / %x23-5B / %x5D-7E )
+     * </pre>
+     *
+     * <p>
+     * {@code null} and an empty value do not raise
+     * {@code IllegalArgumentException} and are just ignored.
+     * </p>
+     *
+     * @param scopes
+     *         Scopes to be added.
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @throws IllegalArgumentException
+     *         There is a scope which does not comply with the
+     *         specification.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.3"
+     *      >RFC 6749 (OAuth 2.0), 3.3. Access Token Scope</a>
+     */
     public AuthorizationRequest addScopes(String... scopes)
     {
         if (mScopeSet == null)
@@ -117,6 +341,19 @@ public class AuthorizationRequest
     }
 
 
+    /**
+     * Remove scopes, which are elements in the value of
+     * {@code scope} parameter (OPTIONAL parameter).
+     *
+     * @param scopes
+     *         Scopes to be removed.
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.3"
+     *      >RFC 6749 (OAuth 2.0), 3.3. Access Token Scope</a>
+     */
     public AuthorizationRequest removeScopes(String... scopes)
     {
         if (mScopeSet == null)
@@ -132,21 +369,187 @@ public class AuthorizationRequest
             }
         }
 
+        if (mScopeSet.size() == 0)
+        {
+            mScopeSet = null;
+        }
+
         return this;
     }
 
 
+    /**
+     * Get the state (= the value of {@code state} parameter
+     * (RECOMMENDED parameter)).
+     *
+     * @return
+     *         The value of {@code state} parameter.
+     */
     public String getState()
     {
         return mState;
     }
 
 
+    /**
+     * Set the state (= the value of {@code state} parameter
+     * (RECOMMENDED parameter)).
+     *
+     * @param state
+     *         The value of {@code state} parameter.
+     *
+     * @return
+     *         {@code this} object.
+     */
     public AuthorizationRequest setState(String state)
     {
         mState = state;
 
         return this;
+    }
+
+
+    /**
+     * Get extra parameters added to the authorization request.
+     *
+     * @return
+     *         Extra parameters.
+     */
+    public Map<String, String> getExtraParameters()
+    {
+        return mExtraParameters;
+    }
+
+
+    /**
+     * Set extra parameters added to the authorization request.
+     *
+     * @param parameters
+     *         Extra parameters.
+     *
+     * @return
+     *         {@code this} object.
+     */
+    public AuthorizationRequest setExtraParameters(Map<String, String> parameters)
+    {
+        mExtraParameters = parameters;
+
+        return this;
+    }
+
+
+    /**
+     * Add an extra parameter to the authorization request.
+     * For example, ({@code "display"}, {@code "touch"}) for Facebook.
+     *
+     * @param name
+     *         Parameter name.
+     *
+     * @param value
+     *         Parameter value.
+     *
+     * @return
+     *         {@code this} object.
+     */
+    public AuthorizationRequest addParameter(String name, String value)
+    {
+        if (name == null || name.length() == 0)
+        {
+            return this;
+        }
+
+        if (mExtraParameters == null)
+        {
+            mExtraParameters = new HashMap<String, String>();
+        }
+
+        mExtraParameters.put(name, value);
+
+        return this;
+    }
+
+
+    /**
+     * Remove an extra parameter from the authorization request.
+     *
+     * @param name
+     *         Parameter name.
+     *
+     * @return
+     *         {@code this} object.
+     */
+    public AuthorizationRequest removeParameter(String name)
+    {
+        if (mExtraParameters == null)
+        {
+            return this;
+        }
+
+        if (name == null)
+        {
+            return this;
+        }
+
+        mExtraParameters.remove(name);
+
+        if (mExtraParameters.size() == 0)
+        {
+            mExtraParameters = null;
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Get the delimiter for scopes.
+     * The default value is a space (0x20).
+     *
+     * @return
+     *         The scope delimiter.
+     */
+    public char getScopeDelimiter()
+    {
+        return mScopeDelimiter;
+    }
+
+
+    /**
+     * Set the delimiter for scopes.
+     *
+     * <p>
+     * <a href="http://tools.ietf.org/html/rfc6749#section-3.3"
+     * >RFC 6749 (OAuth 2.0), 3.3. Access Token Scope</a> says <i>
+     * "The value of the scope parameter is expressed as a list of
+     * <b>space</b>-delimited, case-sensitive strings."</i>
+     * However, Facebook does not comply with this specification
+     * and uses a comma (0x2C) as the delimiter. Therefore, for
+     * Facebook, {@code setScopeDelimiter(',')} needs to be called.
+     * </p>
+     *
+     * @param delimiter
+     *         The scope
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.3"
+     *      >RFC 6749 (OAuth 2.0), 3.3. Access Token Scope</a>
+     */
+    public AuthorizationRequest setScopeDelimiter(char delimiter)
+    {
+        mScopeDelimiter = delimiter;
+
+        return this;
+    }
+
+
+    private void validateEndpoint(URL endpoint)
+    {
+        if (endpoint.getRef() != null)
+        {
+            throw new IllegalArgumentException("Endpoint must not include a fragment component.");
+        }
     }
 
 
@@ -194,6 +597,19 @@ public class AuthorizationRequest
     }
 
 
+    /**
+     * Convert this authorization request to a URL.
+     *
+     * @return
+     *         The URL that represents this authorization request.
+     *
+     * @throws IllegalStateException
+     *         <ul>
+     *         <li>Endpoint is not set.
+     *         <li>Response type is not set.
+     *         <li>Client ID is not set.
+     *         </ul>
+     */
     public URL toURL()
     {
         // Validate parameters.
@@ -253,13 +669,19 @@ public class AuthorizationRequest
         if (mScopeSet != null)
         {
             String scope = buildScope();
-            queryBuilder.append("scope=").append(urlEncode(scope));
+            queryBuilder.append("&scope=").append(urlEncode(scope));
         }
 
         // state (RECOMMENDED)
         if (mState != null)
         {
             queryBuilder.append("&state=").append(urlEncode(mState));
+        }
+
+        // Extra parameters.
+        if (mExtraParameters != null)
+        {
+            appendExtraParameters(queryBuilder);
         }
 
         return queryBuilder.toString();
@@ -272,7 +694,7 @@ public class AuthorizationRequest
 
         for (String scope : mScopeSet)
         {
-            scopeBuilder.append(scope).append(" ");
+            scopeBuilder.append(scope).append(mScopeDelimiter);
         }
 
         if (scopeBuilder.length() != 0)
@@ -282,6 +704,33 @@ public class AuthorizationRequest
         }
 
         return scopeBuilder.toString();
+    }
+
+
+    private void appendExtraParameters(StringBuilder builder)
+    {
+        for (Map.Entry<String, String> entry : mExtraParameters.entrySet())
+        {
+            String name = entry.getKey();
+
+            if (name == null || name.length() == 0)
+            {
+                continue;
+            }
+
+            String value = entry.getValue();
+
+            if (value == null)
+            {
+                value = "";
+            }
+
+            builder
+                .append("&")
+                .append(urlEncode(name))
+                .append("=")
+                .append(urlEncode(value));
+        }
     }
 
 
