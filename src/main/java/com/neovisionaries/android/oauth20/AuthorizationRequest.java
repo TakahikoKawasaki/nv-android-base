@@ -16,6 +16,12 @@
 package com.neovisionaries.android.oauth20;
 
 
+import static com.neovisionaries.android.util.ParcelUtils.readChar;
+import static com.neovisionaries.android.util.ParcelUtils.readSerializableWithPresenceFlag;
+import static com.neovisionaries.android.util.ParcelUtils.readStringWithPresenceFlag;
+import static com.neovisionaries.android.util.ParcelUtils.writeChar;
+import static com.neovisionaries.android.util.ParcelUtils.writeSerializableWithPresenceFlag;
+import static com.neovisionaries.android.util.ParcelUtils.writeStringWithPresenceFlag;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,6 +30,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 
 /**
@@ -42,7 +50,7 @@ import java.util.Set;
  *
  * @author Takahiko Kawasaki
  */
-public class AuthorizationRequest
+public class AuthorizationRequest implements Parcelable
 {
     private URL mEndpoint;
     private ResponseType mResponseType;
@@ -52,6 +60,27 @@ public class AuthorizationRequest
     private String mState;
     private Map<String, String> mExtraParameters;
     private char mScopeDelimiter = ' ';
+
+
+    /**
+     * The default constructor.
+     */
+    public AuthorizationRequest()
+    {
+    }
+
+
+    private AuthorizationRequest(Parcel in)
+    {
+        mEndpoint        = (URL)readSerializableWithPresenceFlag(in);
+        mResponseType    = (ResponseType)readSerializableWithPresenceFlag(in);
+        mClientId        = readStringWithPresenceFlag(in);
+        mRedirectUri     = (URL)readSerializableWithPresenceFlag(in);
+        mScopeSet        = readScopeSet(in);
+        mState           = readStringWithPresenceFlag(in);
+        mExtraParameters = readExtraParameters(in);
+        mScopeDelimiter  = readChar(in);
+    }
 
 
     /**
@@ -746,4 +775,131 @@ public class AuthorizationRequest
             return value;
         }
     }
+
+
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel out, int flags)
+    {
+        writeSerializableWithPresenceFlag(out, mEndpoint);
+        writeSerializableWithPresenceFlag(out, mResponseType);
+        writeStringWithPresenceFlag(out, mClientId);
+        writeSerializableWithPresenceFlag(out, mRedirectUri);
+        writeScopeSet(out, mScopeSet);
+        writeStringWithPresenceFlag(out, mState);
+        writeExtraParameters(out, mExtraParameters);
+        writeChar(out, mScopeDelimiter);
+    }
+
+
+    private Set<String> readScopeSet(Parcel in)
+    {
+        // Read the size.
+        int size = in.readInt();
+
+        if (size == 0)
+        {
+            return null;
+        }
+
+        Set<String> set = new HashSet<String>(size);
+
+        for (int i = 0; i < size; ++i)
+        {
+            set.add(in.readString());
+        }
+
+        return set;
+    }
+
+
+    private void writeScopeSet(Parcel out, Set<String> set)
+    {
+        if (set == null)
+        {
+            // Not present (size = 0).
+            out.writeInt(0);
+            return;
+        }
+
+        int size = set.size();
+
+        // Write the size.
+        out.writeInt(size);
+
+        for (String value : set)
+        {
+            out.writeString(value);
+        }
+    }
+
+
+    private Map<String, String> readExtraParameters(Parcel in)
+    {
+        // Read the size.
+        int size = in.readInt();
+
+        if (size == 0)
+        {
+            return null;
+        }
+
+        Map<String, String> map = new HashMap<String, String>(size);
+
+        for (int i = 0; i < size; ++i)
+        {
+            String key   = in.readString();
+            String value = in.readString();
+
+            map.put(key, value);
+        }
+
+        return map;
+    }
+
+
+    private void writeExtraParameters(Parcel out, Map<String, String> map)
+    {
+        if (map == null)
+        {
+            // Not present (size = 0).
+            out.writeInt(0);
+            return;
+        }
+
+        int size = map.size();
+
+        // Write the size.
+        out.writeInt(size);
+
+        for (Map.Entry<String, String> entry : map.entrySet())
+        {
+            out.writeString(entry.getKey());
+            out.writeString(entry.getValue());
+        }
+    }
+
+
+    public static final Parcelable.Creator<AuthorizationRequest> CREATOR
+        = new Parcelable.Creator<AuthorizationRequest>()
+    {
+        @Override
+        public AuthorizationRequest createFromParcel(Parcel in)
+        {
+            return new AuthorizationRequest(in);
+        }
+
+
+        @Override
+        public AuthorizationRequest[] newArray(int size)
+        {
+            return new AuthorizationRequest[size];
+        }
+    };
 }
