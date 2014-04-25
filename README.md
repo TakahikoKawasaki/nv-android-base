@@ -45,11 +45,11 @@ Maven
 -----
 
 ```xml
-    <dependency>
-        <groupId>com.neovisionaries</groupId>
-        <artifactId>nv-android-base</artifactId>
-        <version>1.8</version>
-    </depenency>
+<dependency>
+    <groupId>com.neovisionaries</groupId>
+    <artifactId>nv-android-base</artifactId>
+    <version>1.9</version>
+</depenency>
 ```
 
 
