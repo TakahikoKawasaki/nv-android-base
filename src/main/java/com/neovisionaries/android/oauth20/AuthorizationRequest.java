@@ -35,7 +35,7 @@ import android.os.Parcelable;
 
 
 /**
- * OAuth 2.0 authorization request.
+ * OAuth 2&#x002E;0 authorization request.
  *
  * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1"
  *      >RFC 6749 (OAuth 2.0), 3.1. Authorization Endpoint</a>

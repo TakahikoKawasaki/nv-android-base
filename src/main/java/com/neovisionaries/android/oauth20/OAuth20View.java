@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2014 Neo Visionaries Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.neovisionaries.android.oauth20;
 
 
@@ -7,6 +22,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 
+/**
+ * A {@link WebView} subclass for OAuth 2&#x002E;0 authorization endpoint.
+ *
+ * @since 1.9
+ *
+ * @author Takahiko Kawasaki
+ */
 public class OAuth20View extends WebView
 {
     /**
@@ -68,6 +90,18 @@ public class OAuth20View extends WebView
     }
 
 
+    /**
+     * Access to OAuth 2&#x002E;0 authorization endpoint.
+     *
+     * @param request
+     *         The authorization request.
+     *
+     * @param listener
+     *         A listener to receive the result of the authorization request.
+     *         One of the listener's methods is called in normal cases, but
+     *         none of them is not called when the authorization server did
+     *         not made other response than redirects (3xx).
+     */
     public void load(AuthorizationRequest request, OAuth20ViewListener listener)
     {
         if (request == null)
