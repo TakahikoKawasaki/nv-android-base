@@ -34,30 +34,104 @@ public class ParcelUtils
     }
 
 
+    /**
+     * Read a {@code boolean} value from the {@code Parcel}.
+     *
+     * <p>
+     * This method reads one {@code byte} and returns {@code true}
+     * if the read value is not 0.
+     * </p>
+     *
+     * @param in
+     *         {@code Parcel} to read from.
+     *
+     * @return
+     *         A {@code boolean} value read from the {@code Parcel}.
+     */
     public static boolean readBoolean(Parcel in)
     {
         return (in.readByte() != 0);
     }
 
 
+    /**
+     * Write a {@code boolean} value into the {@code Parcel}.
+     *
+     * <p>
+     * This method writes {@code (byte)1} when {@code value} is {@code true}
+     * and writes {@code (byte)0} when {@code value} is {@code false}.
+     * </p>
+     *
+     * @param out
+     *         {@code Parcel} to write into.
+     *
+     * @param value
+     *         A boolean value to write.
+     */
     public static void writeBoolean(Parcel out, boolean value)
     {
         out.writeByte(value ? (byte)1 : (byte)0);
     }
 
 
+    /**
+     * Read a {@code char} value from the {@code Parcel}.
+     *
+     * <p>
+     * This method reads one {@code int} and converts the read value
+     * into a {@code char} value.
+     * </p>
+     *
+     * @param in
+     *         {@code Parcel} to read from.
+     *
+     * @return
+     *         A {@code char} value read from the {@code Parcel}.
+     */
     public static char readChar(Parcel in)
     {
         return (char)(in.readInt() & 0xFFFF);
     }
 
 
-    public static void writeChar(Parcel out, char ch)
+    /**
+     * Write a {@code char} value into the {@code Parcel}.
+     *
+     * <p>
+     * This method writes the given {@code char} value as {@code int}.
+     * </p>
+     *
+     * @param out
+     *         {@code Parcel} to write into.
+     *
+     * @param value
+     *         A {@code char} value to write.
+     */
+    public static void writeChar(Parcel out, char value)
     {
-        out.writeInt(ch);
+        out.writeInt(value);
     }
 
 
+    /**
+     * Read a {@code String} object from the {@code Parcel}.
+     *
+     * <p>
+     * First, this method reads a {@code boolean} value from the
+     * {@code Parcel} using {@link #readBoolean(Parcel)} method.
+     * When the read {@code boolean} value is {@code true}, this
+     * method executes {@link Parcel#readString() in.readString()}
+     * and returns the value. Otherwise, when the read {@code
+     * boolean} value is {@code false}, this method returns
+     * {@code null}.
+     * </p>
+     *
+     * @param in
+     *         {@code Parcel} to read from.
+     *
+     * @return
+     *         {@code String} object or {@code null}.
+     */
     public static String readStringWithPresenceFlag(Parcel in)
     {
         if (readBoolean(in))
@@ -73,6 +147,25 @@ public class ParcelUtils
     }
 
 
+    /**
+     * Write a {@code String} object with a presence flag into the {@code Parcel}.
+     *
+     * <p>
+     * First, this method checks whether {@code value} is {@code null} or not.
+     * When {@code null}, this method writes {@code false} into the {@code Parcel}
+     * by calling {@link #writeBoolean(Parcel, boolean) writeBoolean(false)} and
+     * does nothing any more. Otherwise, when not {@code null}, this method writes
+     * {@code true} by calling {@link #writeBoolean(Parcel, boolean)
+     * writeBoolean(true)} and then writes the {@code String} object by calling
+     * {@link Parcel#writeString(String) out.writeString(value)}.
+     * </p>
+     *
+     * @param out
+     *         {@code Parcel} to write into.
+     *
+     * @param value
+     *         A {@code String} object to write.
+     */
     public static void writeStringWithPresenceFlag(Parcel out, String value)
     {
         if (value == null)
@@ -91,6 +184,26 @@ public class ParcelUtils
     }
 
 
+    /**
+     * Read a {@code Serializable} object from the {@code Parcel}.
+     *
+     * <p>
+     * First, this method reads a {@code boolean} value from the
+     * {@code Parcel} using {@link #readBoolean(Parcel)} method.
+     * When the read {@code boolean} value is {@code true}, this
+     * method executes {@link Parcel#readSerializable()
+     * in.readSerializable()} and returns the value. Otherwise,
+     * when the read {@code boolean} value is {@code false},
+     * this method returns
+     * {@code null}.
+     * </p>
+     *
+     * @param in
+     *         {@code Parcel} to read from.
+     *
+     * @return
+     *         {@code Serializable} object or {@code null}.
+     */
     public static Serializable readSerializableWithPresenceFlag(Parcel in)
     {
         if (readBoolean(in))
@@ -106,6 +219,25 @@ public class ParcelUtils
     }
 
 
+    /**
+     * Write a {@code Serializable} object with a presence flag into the {@code Parcel}.
+     *
+     * <p>
+     * First, this method checks whether {@code value} is {@code null} or not.
+     * When {@code null}, this method writes {@code false} into the {@code Parcel}
+     * by calling {@link #writeBoolean(Parcel, boolean) writeBoolean(false)} and
+     * does nothing any more. Otherwise, when not {@code null}, this method writes
+     * {@code true} by calling {@link #writeBoolean(Parcel, boolean)
+     * writeBoolean(true)} and then writes the {@code Serializable} object by calling
+     * {@link Parcel#writeSerializable(Serializable) out.writeSerializable(value)}.
+     * </p>
+     *
+     * @param out
+     *         {@code Parcel} to write into.
+     *
+     * @param value
+     *         A {@code String} object to write.
+     */
     public static void writeSerializableWithPresenceFlag(Parcel out, Serializable value)
     {
         if (value == null)

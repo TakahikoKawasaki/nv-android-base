@@ -142,6 +142,8 @@ public class AuthorizationRequest implements Parcelable
      *
      * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1"
      *      >RFC 6749 (OAuth 2.0), 3.1. Authorization Endpoint</a>
+     *
+     * @since 1.10
      */
     public AuthorizationRequest setEndpoint(String endpoint)
     {
@@ -307,6 +309,8 @@ public class AuthorizationRequest implements Parcelable
      *
      * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1.2"
      *      >RFC 6749 (OAuth 2.0), 3.1.2. Redirection Endpoint</a>
+     *
+     * @since 1.10
      */
     public AuthorizationRequest setRedirectUri(String redirectUri)
     {
