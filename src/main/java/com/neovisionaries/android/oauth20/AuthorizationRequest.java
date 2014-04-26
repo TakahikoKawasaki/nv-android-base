@@ -266,8 +266,8 @@ public class AuthorizationRequest implements Parcelable
      *         {@code this} object.
      *
      * @throws IllegalArgumentException
-     *         The redirect URI includes a fragment component.
-     *         It is prohibited by the specification.
+     *         The redirect URI failed to be converted into a {@link URL},
+     *         or it includes a fragment component.
      *
      * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1.2"
      *      >RFC 6749 (OAuth 2.0), 3.1.2. Redirection Endpoint</a>
@@ -282,6 +282,50 @@ public class AuthorizationRequest implements Parcelable
         mRedirectUri = redirectUri;
 
         return this;
+    }
+
+
+    /**
+     * Set the redirect URI (= the value of {@code redirect_uri} parameter
+     * (OPTIONAL parameter)).
+     *
+     * <p>
+     * <a href="http://tools.ietf.org/html/rfc6749#section-3.1.2"
+     * >RFC 6749 (OAuth 2.0), 3.1.2. Redirection Endpoint</a> says
+     * <i>"The redirection endpoint URI MUST be an absolute URI".
+     * </p>
+     *
+     * @param redirectUri
+     *         The redirect URI.
+     *
+     * @return
+     *         {@code this} object.
+     *
+     * @throws IllegalArgumentException
+     *         The redirect URI includes a fragment component.
+     *         It is prohibited by the specification.
+     *
+     * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1.2"
+     *      >RFC 6749 (OAuth 2.0), 3.1.2. Redirection Endpoint</a>
+     */
+    public AuthorizationRequest setRedirectUri(String redirectUri)
+    {
+        URL url = null;
+
+        if (redirectUri != null)
+        {
+            try
+            {
+                url = new URL(redirectUri);
+            }
+            catch (MalformedURLException e)
+            {
+                // The redirect URI is malformed.
+                throw new IllegalArgumentException(e);
+            }
+        }
+
+        return setRedirectUri(url);
     }
 
 
