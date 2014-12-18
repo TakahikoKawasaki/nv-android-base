@@ -22,6 +22,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.PreferenceManager;
 import com.neovisionaries.android.util.Preferences;
 
 
@@ -63,6 +64,11 @@ public class App
     private final Preferences preferences;
 
     /**
+     * Default Preferences.
+     */
+    private final Preferences defaultPreferences;
+
+    /**
      * Flag to indicate whether the application is in the process
      * of termination.
      */
@@ -102,6 +108,9 @@ public class App
 
         // Preferences
         this.preferences = new Preferences(context, pkgName);
+
+        // Default Preferences
+        this.defaultPreferences = new Preferences(PreferenceManager.getDefaultSharedPreferences(context));
 
         // Workaround against Issue 9431.
         doWorkaroundAgainstIssue9431();
@@ -275,6 +284,22 @@ public class App
     public Preferences getPreferences()
     {
         return preferences;
+    }
+
+
+    /**
+     * Get the {@link Preferences} instance that wraps the default shared
+     * preferences.
+     *
+     * @return
+     *         A {@link Preferences} instance that wraps the default shared
+     *         preferences.
+     *
+     * @since 1.11
+     */
+    public Preferences getDefaultPreferences()
+    {
+        return defaultPreferences;
     }
 
 
