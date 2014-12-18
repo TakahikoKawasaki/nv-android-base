@@ -107,7 +107,21 @@ public class Preferences extends TypedProperties
      */
     public Preferences(Context context, String name, int mode)
     {
-        prefs = context.getSharedPreferences(name, mode);
+        this(context.getSharedPreferences(name, mode));
+    }
+
+
+    /**
+     * Constructor with a wrapped {@link SharedPreferences}.
+     *
+     * @param prefs
+     *         An {@link SharedPreferences} to be wrapped.
+     *
+     * @since 1.11
+     */
+    public Preferences(SharedPreferences prefs)
+    {
+        this.prefs = prefs;
     }
 
 
