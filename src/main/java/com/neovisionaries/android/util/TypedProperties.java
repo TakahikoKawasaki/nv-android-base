@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2014 Neo Visionaries Inc.
+ * Copyright (C) 2011-2014,2016 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,14 @@ package com.neovisionaries.android.util;
  * <li>{@code boolean }{@link #contains(String) contains(String key)}
  * <li>{@code boolean }{@link #getBoolean(String, boolean) getBoolean(String key, boolean defaultValue)}
  * <li>{@code float }{@link #getFloat(String, float) getFloat(String key, float defaultValue)}
+ * <li>{@code double }{@link #getDouble(String, double) getDouble(String key, double defaultValue)}
  * <li>{@code int }{@link #getInt(String, int) getInt(String key, int defaultValue)}
  * <li>{@code long }{@link #getLong(String, long) getLong(String key, long defaultValue)}
  * <li>{@code String }{@link #getString(String, String) getString(String key, String defaultValue)}
  * <li>{@code void }{@link #remove(String) remove(String key)}
  * <li>{@code void }{@link #setBoolean(String, boolean) setBoolean(String key, boolean value)}
  * <li>{@code void }{@link #setFloat(String, float) setFloat(String key, float value)}
+ * <li>{@code void }{@link #setDouble(String, double) setDouble(String key, double value)}
  * <li>{@code void }{@link #setInt(String, int) setInt(String key, int value)}
  * <li>{@code void }{@link #setLong(String, long) setLong(String key, long value)}
  * <li>{@code void }{@link #setString(String, String) setString(String key, String value)}
@@ -208,6 +210,88 @@ public abstract class TypedProperties
         }
 
         return getFloat(key.name());
+    }
+
+
+    /**
+     * Get the value of the property identified by the key as double.
+     * If {@code key} is null or there is no property for the key,
+     * {@code defaultValue} is returned.
+     *
+     * @since 1.12
+     */
+    public abstract double getDouble(String key, double defaultValue);
+
+
+    /**
+     * Equivalent to {@link #getDouble(String, double)
+     * getDouble}{@code (key, defaultValue)}.
+     *
+     * @since 1.12
+     */
+    public double get(String key, double defaultValue)
+    {
+        return getDouble(key, defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getDouble(String, double)
+     * getDouble}{@code (key, 0.0F)}.
+     *
+     * @since 1.12
+     */
+    public double getDouble(String key)
+    {
+        return getDouble(key, 0.0);
+    }
+
+
+    /**
+     * Equivalent to {@link #getDouble(String, double)
+     * getDouble}{@code (key.name(), defaultValue)}.
+     * If {@code key} is null, {@code defaultValue} is returned.
+     *
+     * @since 1.12
+     */
+    public double getDouble(Enum<?> key, double defaultValue)
+    {
+        if (key == null)
+        {
+            return defaultValue;
+        }
+
+        return getDouble(key.name(), defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getDouble(Enum, double)
+     * getFloat}{@code (key, defaultValue)}.
+     *
+     * @since 1.12
+     */
+    public double get(Enum<?> key, double defaultValue)
+    {
+        return getDouble(key, defaultValue);
+    }
+
+
+    /**
+     * Equivalent to {@link #getDouble(String)
+     * getDouble}{@code (key.name())}.
+     * If {@code key} is null, 0.0 is returned.
+     *
+     * @since 1.12
+     */
+    public double getDouble(Enum<?> key)
+    {
+        if (key == null)
+        {
+            return 0.0;
+        }
+
+        return getDouble(key.name());
     }
 
 
@@ -489,7 +573,7 @@ public abstract class TypedProperties
 
 
     /**
-     * Equivalent to {@link #getEnum(String, Class)
+     * Equivalent to {@link #getEnum(Enum, Class)
      * getEnum}{@code (key.name(), enumClass)}.
      * If {@code key} is null, {@code null} is returned.
      *
@@ -679,6 +763,57 @@ public abstract class TypedProperties
     public void set(Enum<?> key, float value)
     {
         setFloat(key, value);
+    }
+
+
+    /**
+     * Set the value to the property identified by the key.
+     * If {@code key} is null, nothing is done.
+     *
+     * @since 1.12
+     */
+    public abstract void setDouble(String key, double value);
+
+
+    /**
+     * Equivalent to {@link #setDouble(String, double)
+     * setDouble}{@code (key, value)}.
+     *
+     * @since 1.12
+     */
+    public void set(String key, double value)
+    {
+        setDouble(key, value);
+    }
+
+
+    /**
+     * Equivalent to {@link #setDouble(String, double)
+     * setDouble}{@code (key.name(), value)}.
+     * If {@code key} is null, nothing is done.
+     *
+     * @since 1.12
+     */
+    public void setDouble(Enum<?> key, double value)
+    {
+        if (key == null)
+        {
+            return;
+        }
+
+        setDouble(key.name(), value);
+    }
+
+
+    /**
+     * Equivalent to {@link #setDouble(Enum, double)
+     * setDouble}{@code (key, value)}.
+     *
+     * @since 1.12
+     */
+    public void set(Enum<?> key, double value)
+    {
+        setDouble(key, value);
     }
 
 

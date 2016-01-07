@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Neo Visionaries Inc.
+ * Copyright (C) 2014,2016 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,10 +38,12 @@ package com.neovisionaries.android.util;
  * <ul>
  * <li>{@code boolean }{@link #getBoolean(String, boolean) getBoolean(String key, boolean defaultValue)}
  * <li>{@code float }{@link #getFloat(String, float) getFloat(String key, float defaultValue)}
+ * <li>{@code double }{@link #getDouble(String, double) getDouble(String key, double defaultValue)}
  * <li>{@code int }{@link #getInt(String, int) getInt(String key, int defaultValue)}
  * <li>{@code long }{@link #getLong(String, long) getLong(String key, long defaultValue)}
  * <li>{@code void }{@link #setBoolean(String, boolean) setBoolean(String key, boolean value)}
  * <li>{@code void }{@link #setFloat(String, float) setFloat(String key, float value)}
+ * <li>{@code void }{@link #setDouble(String, double) setDouble(String key, double value)}
  * <li>{@code void }{@link #setInt(String, int) setInt(String key, int value)}
  * <li>{@code void }{@link #setLong(String, long) setLong(String key, long value)}
  * </ul>
@@ -94,6 +96,32 @@ public abstract class StringBasedTypedProperties extends TypedProperties
         try
         {
             return Float.parseFloat(value);
+        }
+        catch (NumberFormatException e)
+        {
+            return defaultValue;
+        }
+    }
+
+
+    @Override
+    public double getDouble(String key, double defaultValue)
+    {
+        if (key == null)
+        {
+            return defaultValue;
+        }
+
+        String value = getString(key, null);
+
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        try
+        {
+            return Double.parseDouble(value);
         }
         catch (NumberFormatException e)
         {
@@ -168,6 +196,18 @@ public abstract class StringBasedTypedProperties extends TypedProperties
 
     @Override
     public void setFloat(String key, float value)
+    {
+        if (key == null)
+        {
+            return;
+        }
+
+        setString(key, String.valueOf(value));
+    }
+
+
+    @Override
+    public void setDouble(String key, double value)
     {
         if (key == null)
         {

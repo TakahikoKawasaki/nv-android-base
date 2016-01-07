@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2013 Neo Visionaries Inc.
+ * Copyright (C) 2011-2013,2016 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -172,6 +172,29 @@ public class Preferences extends TypedProperties
     }
 
 
+    @Override
+    public double getDouble(String key, double defaultValue)
+    {
+        if (key == null)
+        {
+            return defaultValue;
+        }
+
+        // SharedPreferences does not provide getDouble() method,
+        // so a double value is stored as a string.
+        String value = prefs.getString(key, String.valueOf(defaultValue));
+
+        try
+        {
+            return Double.parseDouble(value);
+        }
+        catch (NumberFormatException e)
+        {
+            return defaultValue;
+        }
+    }
+
+
     /**
      * Equivalent to {@code getInt(key, defaultValue)}
      * on the internal SharedPreferences instance.
@@ -249,6 +272,18 @@ public class Preferences extends TypedProperties
         if (key != null)
         {
             prefs.edit().putFloat(key, value).commit();
+        }
+    }
+
+
+    @Override
+    public void setDouble(String key, double value)
+    {
+        if (key != null)
+        {
+            // Save as a string because SharedPreferences does not
+            // provide putDouble() method.
+            prefs.edit().putString(key, String.valueOf(value)).commit();
         }
     }
 
