@@ -4,7 +4,7 @@
 
     <groupId>com.neovisionaries</groupId>
     <artifactId>nv-android-base</artifactId>
-    <version>1.12</version>
+    <version>1.13-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Neo Visionaries Android Base Package</name>
     <description>Basic building blocks for Android applications</description>
@@ -28,7 +28,7 @@
         <connection>scm:git:git@github.com:TakahikoKawasaki/nv-android-base.git</connection>
         <developerConnection>scm:git:git@github.com:TakahikoKawasaki/nv-android-base.git</developerConnection>
         <url>git@github.com:TakahikoKawasaki/nv-android-base.git</url>
-      <tag>nv-android-base-1.12</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <properties>
